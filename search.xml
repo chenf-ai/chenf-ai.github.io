@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>TMUX使用介绍</title>
+    <url>/2020/01/30/Basic-Use-of-TMUX/</url>
+    <content><![CDATA[<p>简单介绍tmux的使用</p>
+<h3 id="tmux的主要功能"><a href="#tmux的主要功能" class="headerlink" title="tmux的主要功能"></a>tmux的主要功能</h3><ul>
+<li>支持切屏，使用更加灵活、方便。</li>
+<li>开启的会话能够在后台持续工作，当需要进行比较耗时的任务（例如神经网络的训练）时，可以用终端连接服务器主机，然后配合tmux进行工作。</li>
+</ul>
+<h3 id="session-window和pane"><a href="#session-window和pane" class="headerlink" title="session, window和pane"></a>session, window和pane</h3><ul>
+<li>一个tmux即相当于一个server，一个tmux可以有多个session，一个session可以有多个window，一个window可以有多个pane。</li>
+<li>在使用tmux时，下方底部会显示一行与session, window有关的创建信息。</li>
+</ul>
+<h3 id="tmux的基本命令——shell界面使用"><a href="#tmux的基本命令——shell界面使用" class="headerlink" title="tmux的基本命令——shell界面使用"></a>tmux的基本命令——shell界面使用</h3><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用tmux，对应着开启一个server并同时开启一个session</span></span><br><span class="line">tmux</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示所有的session</span></span><br><span class="line">tmux ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 新建session，若不指定-s参数则不指定session的名称</span></span><br><span class="line">tmux new [-s &lt;session-name&gt;]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 回到某个session，若不指定-t参数则回到上一个session</span></span><br><span class="line">tmux a/attach [-t/target-session &lt;session-name&gt;]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭指定的session</span></span><br><span class="line">tmux kill-session -t session-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭除指定session外所有的session</span></span><br><span class="line">tmux kill-session -a -t session-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭所有session，注意当所有session均关闭时意味着接触tmux形态</span></span><br><span class="line">tmux kill-server</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 重命名session</span></span><br><span class="line">tmux rename -t old_session_name new_session_name</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="相关快捷键命令——在tmux内部使用"><a href="#相关快捷键命令——在tmux内部使用" class="headerlink" title="相关快捷键命令——在tmux内部使用"></a>相关快捷键命令——在tmux内部使用</h3><ul>
+<li><p>可通过修改~/.tmux.conf配置文件来修改bind-key</p>
+</li>
+<li><p>使用Ctrl + b在tmux内部进入快捷键模式</p>
+</li>
+<li><p>基本快捷键</p>
+<table>
+<thead>
+<tr>
+<th>快捷键（这里指先使用Ctrl+b后再使用的快捷键）</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>?</td>
+<td>相当于-help参数，列出所有的快捷键信息</td>
+</tr>
+<tr>
+<td>:</td>
+<td>在底部出现特殊的命令行（有颜色强调），该命令行可不使用tmux前缀而使用上述基本命令</td>
+</tr>
+<tr>
+<td>[</td>
+<td>进入复制模式，空格键确定开始复制，类似vim进行区域选择，最后使用回车键确定选择完毕并退出（这里可能需要在配置文件中进行配置才可使用，具体见<strong>其他说明</strong>）。与vim相区别使用:起到goto line的作用</td>
+</tr>
+<tr>
+<td>]</td>
+<td>使用最近一次”[“快捷键复制的内容进行粘贴</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>与session有关的快捷键</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d</td>
+<td>脱离当前会话</td>
+</tr>
+<tr>
+<td>Ctrl+z</td>
+<td>挂起当前会话</td>
+</tr>
+<tr>
+<td>r</td>
+<td>强制重绘未脱离的会话（测试使用时发现没有达到效果）</td>
+</tr>
+<tr>
+<td>s</td>
+<td>显示所有会话，通过上下选择以及回车键切换</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>与window有关的快捷键</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c</td>
+<td>创建新的窗口</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>关闭当前窗口</td>
+</tr>
+<tr>
+<td>数字键（无需考虑2位数的冲突问题，因为单个session对应的窗口有个数限制）</td>
+<td>切换至制定的窗口</td>
+</tr>
+<tr>
+<td>p</td>
+<td>切换至上一个窗口</td>
+</tr>
+<tr>
+<td>n</td>
+<td>切换至下一个窗口</td>
+</tr>
+<tr>
+<td>w</td>
+<td>展示窗口列表，通过上下键选择并通过回车键选定（这里的窗口列表包括所有会话的所有窗口）</td>
+</tr>
+<tr>
+<td>,</td>
+<td>重命名当前窗口</td>
+</tr>
+<tr>
+<td>.</td>
+<td>修改当前窗口编号</td>
+</tr>
+<tr>
+<td>f</td>
+<td>在所有窗口中进行制定文本的查找</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>与pane有关的操作</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“</td>
+<td>将当前面板划分为上下两部分</td>
+</tr>
+<tr>
+<td>%</td>
+<td>将当前面板划分为左右两部分</td>
+</tr>
+<tr>
+<td>x</td>
+<td>关闭当前面板</td>
+</tr>
+<tr>
+<td>!</td>
+<td>将当前面板抽出单独作为一个新的窗口</td>
+</tr>
+<tr>
+<td>Ctrl+方向键</td>
+<td>以１个单元格为单位移动来调整当前pane的size</td>
+</tr>
+<tr>
+<td>Alt+方向键</td>
+<td>以５个单元格为单位移动来调整当前pane的size</td>
+</tr>
+<tr>
+<td>q</td>
+<td>显示面板编号</td>
+</tr>
+<tr>
+<td>o</td>
+<td>在当前窗口中选择该面板的下一个面板</td>
+</tr>
+<tr>
+<td>方向键</td>
+<td>移动选择面板</td>
+</tr>
+<tr>
+<td>{</td>
+<td>向前置换当前面板</td>
+</tr>
+<tr>
+<td>}</td>
+<td>向后置换当前面板</td>
+</tr>
+<tr>
+<td>z</td>
+<td>最大化当前面板，再使用一次会恢复正常</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><ul>
+<li><p>使用”Ctrl+b [“进入复制模式后如果要使用vim的快捷键，如果发现无法使用的话需要在~/.tmux.conf配置文件中添加如下设置</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># Use vim keybindings in copy mode</span></span><br><span class="line">setw -g mode-keys vi</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+</ul>
+<h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><ul>
+<li><p>该blog参考下列文章</p>
+<p><a href="https://blog.csdn.net/huang007guo/article/details/84236408">https://blog.csdn.net/huang007guo/article/details/84236408</a></p>
+<p><a href="https://www.cnblogs.com/wangqiguo/p/8905081.html">https://www.cnblogs.com/wangqiguo/p/8905081.html</a></p>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>tmux</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux中的终端PATH配置</title>
+    <url>/2020/02/22/Change-PATH-in-Linux/</url>
+    <content><![CDATA[<h3 id="修改终端环境变量的方法"><a href="#修改终端环境变量的方法" class="headerlink" title="修改终端环境变量的方法"></a>修改终端环境变量的方法</h3><ul>
+<li><p>在此次打开终端后，可以使用export命令来设置环境变量，例如南哪大学的ics课程中可以通过export命令设置STUID环境变量来进行PA提交。</p>
+</li>
+<li><p>可以通过修改~/目录下隐藏的.bashrc或.zshrc文件来设置环境变量，例如下面设置LOVE_PERSON环境变量为QZH。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">export LOVE_PERSON=QZH</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>注意环境变量名一般全部大写。</p>
+</li>
+</ul>
+<h3 id="修改PATH环境变量"><a href="#修改PATH环境变量" class="headerlink" title="修改PATH环境变量"></a>修改PATH环境变量</h3><ul>
+<li><p>PATH变量简单介绍：PATH变量决定了shell将到哪些目录中寻找命令或程序，若执行的命令的目录包含在$PATH中，则可在终端中直接用命令名称来运行该命令而不需要给出完整的路径名称。如果需要快速执行某个可执行文件，可以将该可执行文件放置到PATH相应的目录下，也可以将该可执行文件所在目录添加到PATH变量中。</p>
+</li>
+<li><p>使用$PATH可获取PATH变量值，使用echo $PATH可以显示当前的PATH变量。</p>
+</li>
+<li><p>更改PATH变量值可以在终端中输入</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">PATH=$PATH:/some/directory</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样会相应地添加后面的目录到PATH变量中，注意这里是添加而不会删除$PATH中其他的所有目录。</p>
+<p>上面的修改方式仅设置此次打开终端后的操作，也在.bashrc/.zshrc中直接修改PATH变量的值，这样在下次打开终端后设置依然有效。</p>
+</li>
+</ul>
+<h3 id="alias别名"><a href="#alias别名" class="headerlink" title="alias别名"></a>alias别名</h3><ul>
+<li><p>修改.bashrc/.zshrc可设置别名，很好理解也很有用，下面从例子来看：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">alias rm = 'rm -i'</span><br><span class="line">alias cp = 'cp -i'</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意：通过该方法可以将rm更改为将文件或者目录放置到指定的目录下，然后定期删除该目录，这样可以防止错删文件。</p>
+</li>
+</ul>
+<p><strong>- i files</strong>指only include the following files</p>
+<h3 id="提示符"><a href="#提示符" class="headerlink" title="提示符"></a>提示符</h3><ul>
+<li>提示符指的是终端前的格式，合理的提示符可以帮助用户更好的工作，通过修改.bashrc/.zshrc中的内容也可以更改终端提示符的格式。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>环境变量</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux中的小工具</title>
+    <url>/2020/08/31/Get-info-in-linux/</url>
+    <content><![CDATA[<h3 id="调节音量"><a href="#调节音量" class="headerlink" title="调节音量"></a>调节音量</h3><h4 id="AlsaMixer"><a href="#AlsaMixer" class="headerlink" title="AlsaMixer"></a>AlsaMixer</h4><ul>
+<li><p>AlsaMixer界面如下图所示</p>
+<p><img src="/images/alsamixer.png"></p>
+</li>
+<li><p>在终端键入alsamixer即可进入alsamixer的使用，进入使用界面后根据界面提示调节音量，基本操作包括</p>
+<ul>
+<li>上下方向键进行整体音量调节。</li>
+<li>Q键增大左声道，E键增大右声道。</li>
+<li>Esc键退出。</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看电量"><a href="#查看电量" class="headerlink" title="查看电量"></a>查看电量</h3><ul>
+<li><p>电量信息存储在/sys/目录下的某个文件名为capacity的文件中，可使用如下命令得到电量信息</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">find /sys/ -name capacity -<span class="built_in">exec</span> cat {} \;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了方便可利用alias设置该命令别名为capacity（写入~/.bashrc当中）。</p>
+<p>注意：使用该方法只能得到电量百分比信息，且可能会出现错误信息（因为/sys/下的某些文件可能没有权限访问）。</p>
+</li>
+<li><p>使用如下命令</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">upower -i /org/freedesktop/UPower/devices/battery_BAT0</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux系统调用:dlopen</title>
+    <url>/2020/04/13/Intro-of-dlopen/</url>
+    <content><![CDATA[<h3 id="dlopen的身份"><a href="#dlopen的身份" class="headerlink" title="dlopen的身份"></a>dlopen的身份</h3><ul>
+<li><p>dlopen用于加载动态分享库:happy:，其函数声明如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span> *handle)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>参数filename指定了需要加载的分享库，flags指定了加载的模式。</p>
+</li>
+<li><p>执行成功时，函数返回一个共享库文件的handle；若执行出错，则返回NULL。</p>
+</li>
+</ul>
+<h3 id="flags一二说"><a href="#flags一二说" class="headerlink" title="flags一二说"></a>flags一二说</h3><ul>
+<li><p>flags参数用来指定加载模式，主要有如下的几种区分。如果想使用不同层面的模式组合，使用按位或即可。<span class="github-emojis" style="color: transparent;background:no-repeat url(https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png?v8) center/contain" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png?v8">😎</span></p>
+</li>
+<li><p>RTLD_LAZY VS. RTLD_NOW</p>
+<p>RTLD_LAZY指定共享库在其中的符号被引用时，才会真正地加载共享库。而RTLD_NOW是立刻加载。</p>
+<p>需要注意RTLD_LAZY的效果会被LD_BIND_NOW的效果掩盖。</p>
+</li>
+<li><p>RTLD_LOCAL VS. RTLD_LOCAL</p>
+<p>RTLD_LOCAL规定此次加载的共享库的动态符号，在后面加载的其他共享库中可以使用。例如顺序加载函数<code>func1</code>和<code>func2</code>，那么<code>func2</code>中使用了<code>func1</code>是被允许的。</p>
+<p>RTLD_LOCAL与RTLD_LOCAL刚好相反，它不允许。</p>
+</li>
+<li><p>RTLD_NODELETE</p>
+<p>如果指定RTLD_NODELETE，那么即使handle被<code>dlclose()</code>，加载的共享库实际也不会被删掉。</p>
+</li>
+<li><p>RTLD_NOLOAD</p>
+<p>意味着此次是<strong>伪</strong>加载，实际上没有加载。</p>
+<p>问：为什么设置这个功能，有什么用？</p>
+<p>答：可根据返回值类型判断是否存在共享库！</p>
+</li>
+</ul>
+<h3 id="dlopen的使用-grinning"><a href="#dlopen的使用-grinning" class="headerlink" title="dlopen的使用:grinning:"></a>dlopen的使用<span class="github-emojis" style="color: transparent;background:no-repeat url(https://github.githubassets.com/images/icons/emoji/unicode/1f600.png?v8) center/contain" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f600.png?v8">😀</span></h3><ul>
+<li><p>首先，需要说明的一点是，使用dlopen的源代码在编译时需要加上<code>-ldl</code>选项</p>
+</li>
+<li><p>一套连招使用方法是：</p>
+<ul>
+<li>使用mkstemp family系统调用创建一个新的文件，然后将某段主角代码写进去。</li>
+<li>在程序中通过exec family系统调用来调用gcc，添加正确的编译选项，将第一招里创建的文件编译成共享库。</li>
+<li><span class="github-emojis" style="color: transparent;background:no-repeat url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8) center/contain" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">😆</span>使用dlopen加载共享库！并且根据使用目的选择合适的flags。</li>
+<li>得到handle之后，即可使用dlsym系统调用得到symbol的地址，也就是函数指针！得到函数指针之后可以尽情地调用函数。</li>
+<li>根据目的选择是否要dlclose。</li>
+</ul>
+</li>
+<li><p>RTFM标准样例代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>{</span><br><span class="line">    <span class="keyword">void</span> *handle;</span><br><span class="line">    <span class="keyword">double</span> (*cosine)(<span class="keyword">double</span>);</span><br><span class="line">    <span class="keyword">char</span> *error;</span><br><span class="line"></span><br><span class="line">    handle = dlopen(LIBM_SO, RTLD_LAZY);</span><br><span class="line">    <span class="keyword">if</span> (!handle) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s\n"</span>, dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    dlerror();    <span class="comment">/* Clear any existing error */</span></span><br><span class="line"></span><br><span class="line">    cosine = (<span class="keyword">double</span> (*)(<span class="keyword">double</span>)) dlsym(handle, <span class="string">"cos"</span>);</span><br><span class="line"></span><br><span class="line">    error = dlerror();</span><br><span class="line">    <span class="keyword">if</span> (error != <span class="literal">NULL</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s\n"</span>, error);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f\n"</span>, (*cosine)(<span class="number">2.0</span>));</span><br><span class="line">    dlclose(handle);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux系统调用:atexit</title>
+    <url>/2020/04/06/Intro-of-atexit/</url>
+    <content><![CDATA[<h3 id="atexit函数申明"><a href="#atexit函数申明" class="headerlink" title="atexit函数申明"></a>atexit函数申明</h3><figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">atexit</span><span class="params">(<span class="keyword">void</span> (*function)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="atexit函数简单介绍"><a href="#atexit函数简单介绍" class="headerlink" title="atexit函数简单介绍"></a>atexit函数简单介绍</h3><ul>
+<li>atexit函数用于注册回调函数，回调函数在程序正常终止时被调用。</li>
+<li>回调函数的执行顺序是注册顺序的逆序，调用时不传入参数。</li>
+<li>同一函数可以多次注册，每一次注册都会对应一次回调。</li>
+<li>如果使用fork生成子进程，那么子进程会继承父进程注册的回调函数。</li>
+</ul>
+<h3 id="atexit函数的返回值"><a href="#atexit函数的返回值" class="headerlink" title="atexit函数的返回值"></a>atexit函数的返回值</h3><p>成功时返回0，否则返回非0值。</p>
+<h3 id="程序正常终止的理解"><a href="#程序正常终止的理解" class="headerlink" title="程序正常终止的理解"></a>程序正常终止的理解</h3><ul>
+<li>使用exit系统调用返回。</li>
+<li>main函数结束返回。</li>
+</ul>
+<h3 id="样例代码"><a href="#样例代码" class="headerlink" title="样例代码"></a>样例代码</h3><figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bye</span><span class="params">(<span class="keyword">void</span>)</span> </span>{</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"That was all, folks\n"</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>{ </span><br><span class="line">  <span class="keyword">long</span> a;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  a = sysconf(_SC_ATEXIT_MAX);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"ATEXIT_MAX = %ld\n"</span>, a);</span><br><span class="line"></span><br><span class="line">  i = atexit(bye);</span><br><span class="line">  <span class="keyword">if</span> (i != <span class="number">0</span>) {</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"cannot set exit function\n"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux系统调用:exec family</title>
+    <url>/2020/04/13/Intro-of-exev-family/</url>
+    <content><![CDATA[<h3 id="exec-family成员"><a href="#exec-family成员" class="headerlink" title="exec family成员"></a>exec family成员</h3><p>包括例如<code>execl</code>,<code>execlp</code>,<code>execle</code>,<code>execv</code>,<code>execvp</code>,<code>execvpe</code>等在内。</p>
+<h3 id="execve-VS-execvp"><a href="#execve-VS-execvp" class="headerlink" title="execve VS. execvp"></a>execve VS. execvp</h3><ul>
+<li><p>execve的函数声明如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>execvp的函数声明如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>execve中的filename参数需要完整的文件路径(例如/bin/ls)，且需要通过envp参数指定环境变量。而execvp只需传入简要的文件名(例如ls)，且不需要指定环境变量。</p>
+</li>
+<li><p>argv和envp都是字符串数组，且数组最后一个元素必须为NULL，其中argv[0]需要和被执行文件相关(一般即为执行的文件名称,例如ls)。</p>
+</li>
+</ul>
+<h3 id="environ变量"><a href="#environ变量" class="headerlink" title="environ变量"></a>environ变量</h3><ul>
+<li><p>变量声明</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>一般会与execve搭配使用。</p>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux系统调用:dup</title>
+    <url>/2020/03/27/Intro-of-dup/</url>
+    <content><![CDATA[<h3 id="dup介绍"><a href="#dup介绍" class="headerlink" title="dup介绍"></a>dup介绍</h3><ul>
+<li><p>dup的函数声明如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>dup系统调用函数会创建一个文件描述符oldfd的拷贝，具体而言，dup会从低位开始寻找一个unused fd作为拷贝的fd。</p>
+</li>
+<li><p>成功返回后，oldfd and newfd may be used interchangeably，意思是两个文件描述符在某种意义上是一致的（或者说在使用上是可互换的），他们refer to相同的open file description，具有一致的文件偏移量和文件状态标志（file offset and file status flags）；但两者并不共享文件描述符标志（file descriptor flags）。</p>
+</li>
+</ul>
+<h3 id="dup2介绍"><a href="#dup2介绍" class="headerlink" title="dup2介绍"></a>dup2介绍</h3><ul>
+<li><p>dup2的函数声明</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>dup2与dup类似，区别在于并不从最低位开始寻找unused fd，而是使用参数制定的newfd。</p>
+</li>
+<li><p>如果newfd已经打开，那么首先会close然后reuse，注意这一过程必须是原子的。例如如果用close加dup来实现这一过程可能会存在数据竞争的情况，在close和dup之间newfd被复用。</p>
+</li>
+<li><p>如果oldfd不是合法的文件描述符，系统调用会失败，并且newfd不会close；如果oldfd是合法文件描述符，但newfd与oldfd的值相同，那么dup2系统调用什么都不会做并且返回newfd。</p>
+</li>
+</ul>
+<h3 id="关于返回值"><a href="#关于返回值" class="headerlink" title="关于返回值"></a>关于返回值</h3><ul>
+<li>如果dup和dup2执行成功，则函数返回值为newfd的值，若失败则返回-1。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Iinux系统调用:mkstemp-family</title>
+    <url>/2020/04/13/Intro-of-mkstemp-family/</url>
+    <content><![CDATA[<h3 id="mkstemp精彩家族"><a href="#mkstemp精彩家族" class="headerlink" title="mkstemp精彩家族"></a>mkstemp精彩家族</h3><p>精彩家族声明演义</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkstemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkostemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkstemps</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> suffixlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkostemps</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> suffixlen, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Quick-Use-Review"><a href="#Quick-Use-Review" class="headerlink" title="Quick Use Review"></a>Quick Use Review</h3><ul>
+<li>mkstemp函数传入字符串参数，要求最后6个字符为XXXXXX。</li>
+<li>mkstemps函数允许创建文件名在XXXXXX后面有后缀，后缀字符串通过第二个参数传入。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux系统调用:pipe</title>
+    <url>/2020/03/27/Intro-of-pipe/</url>
+    <content><![CDATA[<h3 id="pipe简要介绍"><a href="#pipe简要介绍" class="headerlink" title="pipe简要介绍"></a>pipe简要介绍</h3><ul>
+<li><p>pipe是linux中用于创建管道（单向数据管道，a unidirectional data channel），可用于进程间的数据交互。</p>
+</li>
+<li><p>函数声明为</p>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> pipefd[<span class="number">2</span>])</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当函数pipe成功返回时，数组pipefd分别被赋值为两个文件描述符，pipefd[0]为管道的读端口，pipefd[1]是管道的写端口。</p>
+</li>
+<li><p>如果函数返回0则代表调用成功，返回-1代表调用失败。</p>
+</li>
+</ul>
+<h3 id="样例代码"><a href="#样例代码" class="headerlink" title="样例代码"></a>样例代码</h3><figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">int</span> pipefd[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">pid_t</span> cpid;</span><br><span class="line">    <span class="keyword">char</span> buf;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s &lt;string&gt;\n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pipe(pipefd) == <span class="number">-1</span>) {</span><br><span class="line">        perror(<span class="string">"pipe"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    cpid = fork();</span><br><span class="line">    <span class="keyword">if</span> (cpid == <span class="number">-1</span>) {</span><br><span class="line">        perror(<span class="string">"fork"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cpid == <span class="number">0</span>) {    <span class="comment">/* Child reads from pipe */</span></span><br><span class="line">        close(pipefd[<span class="number">1</span>]);          <span class="comment">/* Close unused write end */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (read(pipefd[<span class="number">0</span>], &amp;buf, <span class="number">1</span>) &gt; <span class="number">0</span>)</span><br><span class="line">            write(STDOUT_FILENO, &amp;buf, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        write(STDOUT_FILENO, <span class="string">"\n"</span>, <span class="number">1</span>);</span><br><span class="line">        close(pipefd[<span class="number">0</span>]);</span><br><span class="line">        _exit(EXIT_SUCCESS);</span><br><span class="line"></span><br><span class="line">    } <span class="keyword">else</span> {            <span class="comment">/* Parent writes argv[1] to pipe */</span></span><br><span class="line">        close(pipefd[<span class="number">0</span>]);          <span class="comment">/* Close unused read end */</span></span><br><span class="line">        write(pipefd[<span class="number">1</span>], argv[<span class="number">1</span>], <span class="built_in">strlen</span>(argv[<span class="number">1</span>]));</span><br><span class="line">        close(pipefd[<span class="number">1</span>]);          <span class="comment">/* Reader will see EOF */</span></span><br><span class="line">        wait(<span class="literal">NULL</span>);                <span class="comment">/* Wait for child */</span></span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述程序的功能是假借（这里的假就是借的意思）一个数据管道，使用fork系统调用创建子进程，在子进程中将命令行参数写入管道，然后在父进程中读取管道并标准输出，体现出的效果就是将命令行参数打印（注意规定了参数只有一个）。</p>
+<p>下面给出该代码的一些使用案例（已编译为pipetest二进制文件）</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ ./pipetest CfLoveQzh</span><br><span class="line">Usage: ./pipe_test &lt;string&gt;</span><br><span class="line">$ ./pipetest CfLoveQzh</span><br><span class="line">CfLoveQzh</span><br></pre></td></tr></tbody></table></figure>
+
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pstree使用简单介绍</title>
+    <url>/2020/02/05/Intro-of-pstree/</url>
+    <content><![CDATA[<h3 id="pstree命令的功能"><a href="#pstree命令的功能" class="headerlink" title="pstree命令的功能"></a>pstree命令的功能</h3><figure class="highlight markdown"><table><tbody><tr><td class="code"><pre><span class="line">用树状图的形式展示进程，能够体现进程之间的父子派生关系，包含进程号信息，是直观展示进程信息的命令行工具。</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="pstree命令的相关选项"><a href="#pstree命令的相关选项" class="headerlink" title="pstree命令的相关选项"></a>pstree命令的相关选项</h3><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">-a:完整地展示每个进程的指令，包括路径，参数等。</span><br><span class="line">-c:如果不指定-c选项，则树状图会对一些内容进行折叠；指定-c选项后，会将内容展开。</span><br><span class="line">-h:在列出进程树状图的同时标明当前进程。</span><br><span class="line">-H &lt;进程编号&gt;:类似-h同样地会标明某一进程，但标明的进程是由进程编号指定的进程。</span><br><span class="line">-l:采用长列输出，在默认情况下，输出会根据其他的设置约束截断，指定-l参数后可以使得树状图完整输出。</span><br><span class="line">-n:按照进程编号排序，默认按照名称字典排序。</span><br><span class="line">-p:在展示树状图时展示进程编号。</span><br><span class="line">-u:展示用户名称。</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><p>该Blog参考下面文章内容</p>
+<ul>
+<li><a href="https://blog.csdn.net/yexiangCSDN/article/details/80799600">https://blog.csdn.net/yexiangCSDN/article/details/80799600</a></li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>linux笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>My first Blog!</title>
+    <url>/2020/01/18/my-first-essay/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://chenf-ai.github.io/">Chenf’s 小站</a>! </p>
+<p>chenf —— a dream seeker in fields of AI and cs. </p>
+<h2 id="站牌"><a href="#站牌" class="headerlink" title="站牌"></a>站牌</h2><pre><code>感谢您来到Chenf的小站，这是他的第一次写Blog。
+
+正如您所见，这个小站空空如也，什么都没有～
+
+Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率，希望未来他能够让这个小站更加充实……</code></pre>
+<h2 id="My-github"><a href="#My-github" class="headerlink" title="My github"></a>My github</h2><pre><code>Chenf是一个直男，同时也是cs和AI领域的一位求知者。
+
+他的github账号主要和后者有关。</code></pre>
+<p><strong>URL</strong>: <a href="https://github.com/chenf-ai/">https://github.com/chenf-ai/</a></p>
+<h2 id="My-love-for-7"><a href="#My-love-for-7" class="headerlink" title="My love for 7"></a>My love for 7</h2><ul>
+<li>Chenf have a deep love for 7… The love is as deep as ResNet.</li>
+</ul>
+<p><img src="/images/love_for_7.jpg"></p>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>杂记--纪念篇</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>SMARTS文档阅读 其一</title>
+    <url>/2020/09/03/smarts-1/</url>
+    <content><![CDATA[<h2 id="SMARTS简要介绍"><a href="#SMARTS简要介绍" class="headerlink" title="SMARTS简要介绍"></a>SMARTS简要介绍</h2><ul>
+<li>SMARTS（Scalable Multi-Agent RL Training School）是一个用于强化学习的自动驾驶模拟器平台。</li>
+</ul>
+<h2 id="SMARTS中的若干元素和交互方式"><a href="#SMARTS中的若干元素和交互方式" class="headerlink" title="SMARTS中的若干元素和交互方式"></a>SMARTS中的若干元素和交互方式</h2><ul>
+<li><p>模拟器整个模拟的过程依赖的是环境，也就是<code>gym.make</code>返回的<code>env</code>（这里考虑SMARTS中<code>HiwayEnv</code>类型的环境），而<code>gym.make</code>需要的参数主要有三个，分别为：</p>
+<ul>
+<li><code>name</code>: 环境的名称</li>
+<li><code>scenarios</code>: 环境的场景，参数类型是list，例如<code>scenarios=["scenarios/loop]</code></li>
+<li><code>agent_specs</code>: 与环境交互的agent，参数类型是<strong>字典</strong>，字典的键为<code>agent_id</code>（或者说是agent的名称），值为<code>AgentSpec</code>实例。</li>
+</ul>
+</li>
+<li><p>创建<code>AgentSpec</code>实例时主要需要如下三个参数</p>
+<ul>
+<li><code>interface</code>: <code>AgentInterface</code>的实例</li>
+<li><code>policy_params</code>: agent的policy的相关参数，类型为字典</li>
+<li><code>policy_builder</code>: 设置agent的policy创建方法的参数</li>
+</ul>
+</li>
+<li><p>创建<code>AgentSpec</code>实例时传入的<code>policy_builder</code>参数可以是设计好的<code>Policy</code>类（完善<code>AgentPolicy</code>的相关接口）；也可以是例如<code>AgentPolicy.from_function</code>，但使用这种方法时<code>policy_params</code>必须设定好<code>"policy_function"</code>的值。</p>
+</li>
+<li><p>创建<code>AgentSpec</code>时传入的<code>interface</code>参数决定了agent与环境交互的API接口，一般可以通过<code>AgentInterface.from_type(AgentType.Laner)</code>设定（不同AgentType的interface不同，通过这个方法可以直接设定Agent的interface）。从实际意义来看，<code>interface</code>决定了实际中的车辆是通过怎样的传感器来感知环境，同时也决定了agent策略的行动空间。</p>
+</li>
+<li><p>样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent <span class="keyword">import</span> AgentSpec, AgentPolicy</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent_interface <span class="keyword">import</span> AgentInterface, AgentType</span><br><span class="line"><span class="keyword">from</span> smarts.core.bezier_motion_planner <span class="keyword">import</span> BezierMotionPlanner</span><br><span class="line"><span class="keyword">from</span> smarts.core.utils.episodes <span class="keyword">import</span> episodes</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExamplePolicy</span>(<span class="params">AgentPolicy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, target_speed = <span class="number">10</span></span>):</span></span><br><span class="line">        self.motion_planner = BezierMotionPlanner()</span><br><span class="line">        self.target_speed = target_speed</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span>(<span class="params">self, obs</span>):</span></span><br><span class="line">        ego = obs.ego_vehicle_state</span><br><span class="line">        current_pose = np.array([*ego.position[:<span class="number">2</span>], ego.heading])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># lookahead (at most) 10 waypoints</span></span><br><span class="line">        target_wp = obs.waypoint_paths[<span class="number">0</span>][:<span class="number">10</span>][<span class="number">-1</span>]</span><br><span class="line">        dist_to_wp = target_wp.dist_to(obs.ego_vehicle_state.position)</span><br><span class="line">        target_time = dist_to_wp / self.target_speed</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Here we've computed the pose we want to hold given our target</span></span><br><span class="line">        <span class="comment"># speed and the distance to the target waypoint.</span></span><br><span class="line">        target_pose_at_t = np.array(</span><br><span class="line">            [*target_wp.pos, target_wp.heading, target_time]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># The generated motion planner trajectory is compatible</span></span><br><span class="line">        <span class="comment"># with the `ActionSpaceType.Trajectory`</span></span><br><span class="line">        traj = self.motion_planner.trajectory(</span><br><span class="line">            current_pose, target_pose_at_t, n=<span class="number">10</span>, dt=<span class="number">0.5</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> traj</span><br><span class="line"></span><br><span class="line">AGENT_ID = <span class="string">"Agent-007"</span></span><br><span class="line">agent_spec = AgentSpec(</span><br><span class="line">    interface=AgentInterface.from_type(AgentType.Tracker)</span><br><span class="line">    policy_params={<span class="string">"target_speed"</span>: <span class="number">5</span>},</span><br><span class="line">    policy_builder=ExamplePolicy</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">env = gym.make(</span><br><span class="line">    <span class="string">"smarts.env:hiway-v0"</span>,</span><br><span class="line">    scenarios=[<span class="string">"scenarios/loop"</span>],</span><br><span class="line">    agent_specs={AGENT_ID: agent_spec},</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> episode <span class="keyword">in</span> episodes(n=<span class="number">100</span>):</span><br><span class="line">    agent = agent_spec.build_agent()</span><br><span class="line">    observations = env.reset()</span><br><span class="line">    episode.record_scenario(env.scenario_log)</span><br><span class="line"></span><br><span class="line">    dones = {<span class="string">"__all__"</span>: <span class="literal">False</span>}</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> dones[<span class="string">"__all__"</span>]:</span><br><span class="line">        agent_obs = observations[AGENT_ID]</span><br><span class="line">        action = agent.act(agent_obs)</span><br><span class="line">        observations, rewards, dones, infos = env.step({AGENT_ID: action})</span><br><span class="line">        episode.record_step(observations, rewards, dones, infos)</span><br><span class="line"></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h2 id="关于环境"><a href="#关于环境" class="headerlink" title="关于环境"></a>关于环境</h2><ul>
+<li><p>SMARTS提供了Scenario Studio，可以设计个性化/多样化的地图进行训练，从而提高模型的泛化能力。</p>
+<p><img src="/images/scenario_studio.gif"></p>
+</li>
+<li><p>SMARTS提供了两类环境（两种不同的<code>Env</code>类）。一种是<code>HiwayEnv</code>，与<a href="https://gym.openai.com/">Open AI Gym</a>的接口一致；另一类是<code>RLlibHiwayEnv</code>(which is designed for RLlib framework)。相比而言，后者一定程度上更加高效，但使用起来也复杂些。</p>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>杂记--技术篇</category>
+      </categories>
+      <tags>
+        <tag>smarts</tag>
+        <tag>RL</tag>
+        <tag>模拟器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SMARTS文档阅读 其二</title>
+    <url>/2020/09/03/smarts-2/</url>
+    <content><![CDATA[<h2 id="关于Agent的细节"><a href="#关于Agent的细节" class="headerlink" title="关于Agent的细节"></a>关于Agent的细节</h2><h3 id="AgentSpec"><a href="#AgentSpec" class="headerlink" title="AgentSpec"></a>AgentSpec</h3><ul>
+<li><p>SMARTS允许用户设计个性化的agents，每个<code>agent</code>是<code>AgentSpec</code>的实例化（准确来说，<code>agent</code>是<code>AgentSpec</code>的实例<code>agent_spec</code>通过<code>build_agent</code>方法得到）。</p>
+</li>
+<li><p><code>AgentSpec</code>的属性如下</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AgentSpec</span>:</span></span><br><span class="line">    <span class="comment"># This is optional because sometimes when building re-useable specs,</span></span><br><span class="line">    <span class="comment"># you don't know the agent interface ahead of time.</span></span><br><span class="line">    interface: AgentInterface = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># If you are training a policy with RLLib, you don't necessarily</span></span><br><span class="line">    <span class="comment"># want to set the policy as part of the AgentSpec, thus we leave</span></span><br><span class="line">    <span class="comment"># it as an optional field.</span></span><br><span class="line">    policy_builder: Callable[..., AgentPolicy] = <span class="literal">None</span></span><br><span class="line">    policy_params: Optional[Any] = <span class="literal">None</span></span><br><span class="line">    observation_adapter: Callable = <span class="keyword">lambda</span> obs: obs</span><br><span class="line">    action_adapter: Callable = <span class="keyword">lambda</span> act: act</span><br><span class="line">    reward_adapter: Callable = <span class="keyword">lambda</span> obs, reward: reward</span><br><span class="line">    info_adapter: Callable = <span class="keyword">lambda</span> reward, info: info</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="AgentInterface"><a href="#AgentInterface" class="headerlink" title="AgentInterface"></a>AgentInterface</h3><ul>
+<li><p><code>AgentInterface</code>决定了agent获得的环境信息是何种形式（即决定了<code>observation</code>的形式），同时决定了agent有怎样的动作空间。</p>
+</li>
+<li><p>注意到<code>AgentInterface</code>是<code>AgentSpec</code>的属性之一，所以<code>AgentInterface</code>实际上是<code>Agent</code>特异的。</p>
+</li>
+<li><p><code>AgentInterface</code>一般通过<code>from_type</code>方法实例化，下面给出一个实例化的样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">agent_interface = AgentInterface.from_type(</span><br><span class="line">	interface = AgentType.Standard,</span><br><span class="line">	max_episode_steps = <span class="number">1000</span>,</span><br><span class="line">	...</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，<code>AgentType</code>中包含了一下预先设定好的interface type，内容如下</p>
+<table>
+<thead>
+<tr>
+<th>keys</th>
+<th>AgentType.Full</th>
+<th>AgentType.StandardWithAbsoluteSteering</th>
+<th>AgentType.Standard</th>
+<th>AgentType.Laner</th>
+<th>AgentType.LanerWithSpeed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>max_episode_steps</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>neighborhood_vehicles</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>waypoints</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>drivable_area_grid_map</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ogm</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>rgb</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>lidar</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>action</td>
+<td>ActionSpaceType.Continuous</td>
+<td>ActionSpaceType.Continuous</td>
+<td>ActionSpaceType.ActuatorDynamic</td>
+<td>ActionSpaceType.Lane</td>
+<td>ActionSpaceType.LaneWithContinuousSpeed</td>
+</tr>
+</tbody></table>
+<p>其中<code>max_episode_steps</code>控制了<code>agent</code>每轮episode最多执行的行动步数，如果设置为<code>None</code>则没有最大步数限制。在<code>RLlib</code>中可以通过设置<code>horizon</code>达到同样的效果，但不是agent特异的。</p>
+</li>
+</ul>
+<h3 id="Policy"><a href="#Policy" class="headerlink" title="Policy"></a>Policy</h3><ul>
+<li><code>Policy</code>的设计应当和<code>AgentInterface</code>的设定是适配的，一方面<code>AgentInterface</code>决定了<code>Policy</code> <code>act</code>方法的输入，另一方面<code>Policy</code> <code>act</code>方法的输出应当和<code>AgentInterface</code>相吻合。</li>
+<li><code>Policy</code>可自行设计<code>AgentPolicy</code>的继承类，也可以通过<code>AgentPolicy.from_function</code>实现（这种方法需要在<code>policy_params</code>设定好<code>"policy_function"</code>的值）。</li>
+</ul>
+<h3 id="Adapters-and-Spaces"><a href="#Adapters-and-Spaces" class="headerlink" title="Adapters and Spaces"></a>Adapters and Spaces</h3><ul>
+<li><p>adapters用于对输入输出进行调整。以输入为例，传感器获得信息是比较丰富且复杂的，<code>Adapter</code>的作用是从raw information当中提取出部分信息作为<code>Policy</code>的输入（也就是输入的<code>observation</code>参数）。</p>
+</li>
+<li><p>下面给出一份样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># Adapter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">observation_adapter</span>(<span class="params">env_observation</span>):</span></span><br><span class="line">    ego = env_observation.ego_vehicle_state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        <span class="string">"speed"</span>: [ego.speed],</span><br><span class="line">        <span class="string">"steering"</span>: [ego.steering],</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"><span class="comment"># Associated Space</span></span><br><span class="line"><span class="comment"># You want to match the space to the adapter</span></span><br><span class="line">OBSERVATION_SPACE = gym.spaces.Dict(</span><br><span class="line">{</span><br><span class="line">    <span class="comment">## see http://gym.openai.com/docs/#spaces</span></span><br><span class="line">    <span class="string">"speed"</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">    <span class="string">"steering"</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+</ul>
+<h2 id="关于Environment的细节"><a href="#关于Environment的细节" class="headerlink" title="关于Environment的细节"></a>关于Environment的细节</h2><ul>
+<li><p>目前SMARTS提供两类训练环境，分别是<code>HiwayEnv</code>（<code>gym.env</code>风格的接口）和<code>RLlibHiwayEnv</code>（用于<code>RLlib</code>训练）。</p>
+<img src="/images/smarts_env.png" style="zoom:38%;">
+
+</li>
+</ul>
+<h3 id="HiwayEnv"><a href="#HiwayEnv" class="headerlink" title="HiwayEnv"></a>HiwayEnv</h3><ul>
+<li><p><code>HiwayEnv</code>的接口与<code>gym.Env</code>的接口一致，主要APIs包括<code>reset</code>, <code>step</code>, <code>close</code>。下面给出一个样例使用代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line"><span class="comment"># make env</span></span><br><span class="line">env = gym.make(</span><br><span class="line">        <span class="string">"smarts.env:hiway-v0"</span>, <span class="comment"># env entry name</span></span><br><span class="line">        scenarios=[scenario_path], <span class="comment"># a list of paths to folders of scenarios</span></span><br><span class="line">        agent_specs={AGENT_ID: agent_spec}, <span class="comment"># dictionary of agents to interact with the environment</span></span><br><span class="line">        headless=<span class="literal">False</span>, <span class="comment"># headless mode. False to enable Envision visualization of the environment</span></span><br><span class="line">        visdom=<span class="literal">False</span>, <span class="comment"># Visdom visualization of observations. False to disable. only supported in HiwayEnv.</span></span><br><span class="line">        seed=<span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step({AGENT_ID: agent_action})</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="RLlibHiwayENv"><a href="#RLlibHiwayENv" class="headerlink" title="RLlibHiwayENv"></a>RLlibHiwayENv</h3><ul>
+<li><p><code>RLlibHiwayEnv</code>继承类<code>MultiAgentEnv</code>，也包含<code>reset</code>, <code>step</code>, <code>close</code>的API。</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> smarts.env.rllib_hiway_env <span class="keyword">import</span> RLlibHiWayEnv</span><br><span class="line"></span><br><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line">env = RLlibHiWayEnv(</span><br><span class="line">    config={</span><br><span class="line">        <span class="string">"scenarios"</span>: [scenario_path], <span class="comment"># scenarios list</span></span><br><span class="line">        <span class="string">"agent_specs"</span>: {AGENT_ID: agent}, <span class="comment"># add agents</span></span><br><span class="line">        <span class="string">"headless"</span>: <span class="literal">False</span>, <span class="comment"># enable envision gui, set False to enable.</span></span><br><span class="line">        <span class="string">"seed"</span>: <span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    }</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step({AGENT_ID: agent_action})</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="Environment-features"><a href="#Environment-features" class="headerlink" title="Environment features"></a>Environment features</h3><h4 id="Scenario-Iterator"><a href="#Scenario-Iterator" class="headerlink" title="Scenario Iterator"></a>Scenario Iterator</h4><ul>
+<li>如果<code>Env</code>config传入的参数包含多个scenarios，那么SMARTS会轮流使用这些scenarios, 简单而言在每次调用<code>env.reset()</code>后都会自动加载下一个scenario。</li>
+</ul>
+<h2 id="关于Observations和Actions"><a href="#关于Observations和Actions" class="headerlink" title="关于Observations和Actions"></a>关于Observations和Actions</h2><h3 id="Observations"><a href="#Observations" class="headerlink" title="Observations"></a>Observations</h3><p>Observations是传感器得到的信息，完整的raw observation包含如下的内容（<code>AgentType.Full</code>返回完整内容）。</p>
+<ul>
+<li><p><code>events</code> : 包含如下内容的 <code>NamedTuple</code> 。</p>
+<blockquote>
+<ul>
+<li><code>collisions</code> - collisions the vehicle has been involved with other vehicles (if any)</li>
+<li><code>off_road</code> - <code>True</code> if the vehicle is off the road</li>
+<li><code>off_route</code> - <code>True</code> if the vehicle has off its routes</li>
+<li><code>reached_goal</code> - <code>True</code> if the vehicle has reached its goal</li>
+<li><code>reached_max_episode_steps</code> - <code>True</code> if the vehicle has reached its max episode steps</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>ego_vehicle_state</code> : 名为 <code>VehicleObservation</code>的 <code>NamedTuple</code> ，其中包含了本体Agent的如下信息。</p>
+<blockquote>
+<ul>
+<li><code>id</code> - a string identifier for this vehicle</li>
+<li><code>position</code> - 3D numpy array (x, y, z) of vehicle position, x is right direction, and y is up direction from envision</li>
+<li><code>bounding_box</code> - <code>BoundingBox</code> data class for the <code>length</code>, <code>width</code>, <code>height</code> of the vehicle.</li>
+<li><code>heading</code> - vehicle heading in radians, range(-pi, pi), 0 is up direction from envision</li>
+<li><code>speed</code> - agent speed in m/s</li>
+<li><code>steering</code> - angle of front wheels in radians</li>
+<li><code>yaw_rate</code> - rotational speed in radian per second</li>
+<li><code>lane_id</code> - a globally unique identifier of the lane under this vehicle</li>
+<li><code>lane_index</code> - index of the lane under this vehicle, right most lane has index 0 and the index increments to the left</li>
+<li><code>linear_velocity</code> - A 3D numpy array of vehicle velocities in body coordinate frame</li>
+<li><code>angular_velocity</code> - A 3D numpy array of angular velocity vector</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>neighborhood_vehicle_states</code> :  <code>VehicleObservation</code>的列表。</p>
+<blockquote>
+<ul>
+<li><code>position</code>, <code>bounding_box</code>, <code>heading</code>, <code>speed</code>, <code>lane_id</code>, <code>lane_index</code> - the same as with <code>ego_vehicle_state</code></li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>GridMapMetadata</code> : 包含observation maps的如下信息。</p>
+<blockquote>
+<ul>
+<li><code>created_at</code> - time at which the map was loaded</li>
+<li><code>resolution</code> - map resolution in world-space-distance/cell</li>
+<li><code>width</code> - map width in # of cells</li>
+<li><code>height</code> - map height in # of cells</li>
+<li><code>camera_pos</code> - camera position when project onto the map</li>
+<li><code>camera_heading_in_degrees</code> - camera rotation angle along z-axis when project onto the map</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>top_down_rgb</code> : 关于本体Agent的鸟瞰图以及image的元数据信息。</p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - a RGB image (default 256x256) with the ego vehicle at the center</li>
+</ul>
+<p><img src="/images/smarts_road.png"></p>
+</blockquote>
+</li>
+<li><p><code>occupancy_grid_map</code> : 提供observation image以及元数据 。</p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - A <a href="https://en.wikipedia.org/wiki/Occupancy_grid_mapping">OGM</a> (default 256x256) around the ego vehicle</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>drivable_area_grid_map</code> : 提供observation image以及元数据。 </p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - A grid map (default 256x256) that shows the static drivable area around the ego vehicle</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>waypoint_paths</code> : 本体Agent前方的航路点列表，显示前方的潜在路线。列表中的每个元素都是<code>Waypoint</code>的具有以下字段的实例，</p>
+<blockquote>
+<ul>
+<li><code>id</code> - an integer identifier for this waypoint</li>
+<li><code>pos</code> - a numpy array (x, y) center point along the lane</li>
+<li><code>heading</code> - heading angle of lane at this point (radians)</li>
+<li><code>lane_width</code> - width of lane at this point (meters)</li>
+<li><code>speed_limit</code> - lane speed in m/s</li>
+<li><code>lane_id</code> - a globally unique identifier of lane under waypoint</li>
+<li><code>right_of_way</code> - <code>True</code> if this waypoint has right of way, <code>False</code> otherwise</li>
+<li><code>lane_index</code> - index of the lane under this waypoint, right most lane has index 0 and the index increments to the left</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h3><ul>
+<li><code>ActionSpaceType.Continuous</code>：具有油门，制动器，绝对转向角的连续作用空间。</li>
+<li><code>ActionSpaceType.ActuatorDynamic</code>：具有油门，制动器，转向率的连续作用空间。转向率是指每秒应用于当前转向角的转向角变化量（正或负）。</li>
+<li><code>ActionSpaceType.Lane</code>：字符串的离散车道动作空间，包括“ keep_lane”，“ slow_down”，“ change_lane_left”，“ change_lane_right”。</li>
+<li><code>ActionSpaceType.LaneWithContinuousSpeed</code>：对于lane_change具有一个整数元组，对于target_speed具有一个浮点数。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>]]></content>
+      <categories>
+        <category>杂记--技术篇</category>
+      </categories>
+      <tags>
+        <tag>smarts</tag>
+        <tag>RL</tag>
+        <tag>模拟器</tag>
+      </tags>
+  </entry>
+</search>

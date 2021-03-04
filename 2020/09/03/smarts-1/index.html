@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SMARTS文档阅读 其一 | Chenf's Blog</title><meta name="description" content="smarts(华为)是用于强化学习的自动驾驶任务的模拟器, 这篇博客介绍smarts的quickstart..."><meta name="keywords" content="smarts,RL,模拟器"><meta name="author" content="Chenf"><meta name="copyright" content="Chenf"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="shortcut icon" href="/img/web_logo.png"><link rel="canonical" href="http://chenf-ai.github.io/2020/09/03/smarts-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="SMARTS文档阅读 其一"><meta property="og:url" content="http://chenf-ai.github.io/2020/09/03/smarts-1/"><meta property="og:site_name" content="Chenf's Blog"><meta property="og:description" content="smarts(华为)是用于强化学习的自动驾驶任务的模拟器, 这篇博客介绍smarts的quickstart..."><meta property="og:image" content="http://chenf-ai.github.io/img/smarts.png"><meta property="article:published_time" content="2020-09-02T16:11:37.000Z"><meta property="article:modified_time" content="2020-09-02T23:59:49.603Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '',
+  date_suffix: {"one_hour":"刚刚","hours":"小时前","day":"天前"},
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-09-03 07:59:49'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.1.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/chenf_avater.png" onerror="onerror=null;src='/img/default_avatar.png'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SMARTS%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">SMARTS简要介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMARTS%E4%B8%AD%E7%9A%84%E8%8B%A5%E5%B9%B2%E5%85%83%E7%B4%A0%E5%92%8C%E4%BA%A4%E4%BA%92%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">SMARTS中的若干元素和交互方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">关于环境</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(/img/smarts.png)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Chenf's Blog</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">SMARTS文档阅读 其一</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-09-02T16:11:37.000Z" title="发表于 2020-09-03 00:11:37">2020-09-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-09-02T23:59:49.603Z" title="更新于 2020-09-03 07:59:49">2020-09-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E8%AE%B0-%E6%8A%80%E6%9C%AF%E7%AF%87/">杂记--技术篇</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="SMARTS简要介绍"><a href="#SMARTS简要介绍" class="headerlink" title="SMARTS简要介绍"></a>SMARTS简要介绍</h2><ul>
+<li>SMARTS（Scalable Multi-Agent RL Training School）是一个用于强化学习的自动驾驶模拟器平台。</li>
+</ul>
+<h2 id="SMARTS中的若干元素和交互方式"><a href="#SMARTS中的若干元素和交互方式" class="headerlink" title="SMARTS中的若干元素和交互方式"></a>SMARTS中的若干元素和交互方式</h2><ul>
+<li><p>模拟器整个模拟的过程依赖的是环境，也就是<code>gym.make</code>返回的<code>env</code>（这里考虑SMARTS中<code>HiwayEnv</code>类型的环境），而<code>gym.make</code>需要的参数主要有三个，分别为：</p>
+<ul>
+<li><code>name</code>: 环境的名称</li>
+<li><code>scenarios</code>: 环境的场景，参数类型是list，例如<code>scenarios=["scenarios/loop]</code></li>
+<li><code>agent_specs</code>: 与环境交互的agent，参数类型是<strong>字典</strong>，字典的键为<code>agent_id</code>（或者说是agent的名称），值为<code>AgentSpec</code>实例。</li>
+</ul>
+</li>
+<li><p>创建<code>AgentSpec</code>实例时主要需要如下三个参数</p>
+<ul>
+<li><code>interface</code>: <code>AgentInterface</code>的实例</li>
+<li><code>policy_params</code>: agent的policy的相关参数，类型为字典</li>
+<li><code>policy_builder</code>: 设置agent的policy创建方法的参数</li>
+</ul>
+</li>
+<li><p>创建<code>AgentSpec</code>实例时传入的<code>policy_builder</code>参数可以是设计好的<code>Policy</code>类（完善<code>AgentPolicy</code>的相关接口）；也可以是例如<code>AgentPolicy.from_function</code>，但使用这种方法时<code>policy_params</code>必须设定好<code>"policy_function"</code>的值。</p>
+</li>
+<li><p>创建<code>AgentSpec</code>时传入的<code>interface</code>参数决定了agent与环境交互的API接口，一般可以通过<code>AgentInterface.from_type(AgentType.Laner)</code>设定（不同AgentType的interface不同，通过这个方法可以直接设定Agent的interface）。从实际意义来看，<code>interface</code>决定了实际中的车辆是通过怎样的传感器来感知环境，同时也决定了agent策略的行动空间。</p>
+</li>
+<li><p>样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent <span class="keyword">import</span> AgentSpec, AgentPolicy</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent_interface <span class="keyword">import</span> AgentInterface, AgentType</span><br><span class="line"><span class="keyword">from</span> smarts.core.bezier_motion_planner <span class="keyword">import</span> BezierMotionPlanner</span><br><span class="line"><span class="keyword">from</span> smarts.core.utils.episodes <span class="keyword">import</span> episodes</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExamplePolicy</span>(<span class="params">AgentPolicy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, target_speed = <span class="number">10</span></span>):</span></span><br><span class="line">        self.motion_planner = BezierMotionPlanner()</span><br><span class="line">        self.target_speed = target_speed</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span>(<span class="params">self, obs</span>):</span></span><br><span class="line">        ego = obs.ego_vehicle_state</span><br><span class="line">        current_pose = np.array([*ego.position[:<span class="number">2</span>], ego.heading])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># lookahead (at most) 10 waypoints</span></span><br><span class="line">        target_wp = obs.waypoint_paths[<span class="number">0</span>][:<span class="number">10</span>][<span class="number">-1</span>]</span><br><span class="line">        dist_to_wp = target_wp.dist_to(obs.ego_vehicle_state.position)</span><br><span class="line">        target_time = dist_to_wp / self.target_speed</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Here we've computed the pose we want to hold given our target</span></span><br><span class="line">        <span class="comment"># speed and the distance to the target waypoint.</span></span><br><span class="line">        target_pose_at_t = np.array(</span><br><span class="line">            [*target_wp.pos, target_wp.heading, target_time]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># The generated motion planner trajectory is compatible</span></span><br><span class="line">        <span class="comment"># with the `ActionSpaceType.Trajectory`</span></span><br><span class="line">        traj = self.motion_planner.trajectory(</span><br><span class="line">            current_pose, target_pose_at_t, n=<span class="number">10</span>, dt=<span class="number">0.5</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> traj</span><br><span class="line"></span><br><span class="line">AGENT_ID = <span class="string">"Agent-007"</span></span><br><span class="line">agent_spec = AgentSpec(</span><br><span class="line">    interface=AgentInterface.from_type(AgentType.Tracker)</span><br><span class="line">    policy_params={<span class="string">"target_speed"</span>: <span class="number">5</span>},</span><br><span class="line">    policy_builder=ExamplePolicy</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">env = gym.make(</span><br><span class="line">    <span class="string">"smarts.env:hiway-v0"</span>,</span><br><span class="line">    scenarios=[<span class="string">"scenarios/loop"</span>],</span><br><span class="line">    agent_specs={AGENT_ID: agent_spec},</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> episode <span class="keyword">in</span> episodes(n=<span class="number">100</span>):</span><br><span class="line">    agent = agent_spec.build_agent()</span><br><span class="line">    observations = env.reset()</span><br><span class="line">    episode.record_scenario(env.scenario_log)</span><br><span class="line"></span><br><span class="line">    dones = {<span class="string">"__all__"</span>: <span class="literal">False</span>}</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> dones[<span class="string">"__all__"</span>]:</span><br><span class="line">        agent_obs = observations[AGENT_ID]</span><br><span class="line">        action = agent.act(agent_obs)</span><br><span class="line">        observations, rewards, dones, infos = env.step({AGENT_ID: action})</span><br><span class="line">        episode.record_step(observations, rewards, dones, infos)</span><br><span class="line"></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h2 id="关于环境"><a href="#关于环境" class="headerlink" title="关于环境"></a>关于环境</h2><ul>
+<li><p>SMARTS提供了Scenario Studio，可以设计个性化/多样化的地图进行训练，从而提高模型的泛化能力。</p>
+<p><img src="/images/scenario_studio.gif"></p>
+</li>
+<li><p>SMARTS提供了两类环境（两种不同的<code>Env</code>类）。一种是<code>HiwayEnv</code>，与<a target="_blank" rel="noopener" href="https://gym.openai.com/">Open AI Gym</a>的接口一致；另一类是<code>RLlibHiwayEnv</code>(which is designed for RLlib framework)。相比而言，后者一定程度上更加高效，但使用起来也复杂些。</p>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenf</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://chenf-ai.github.io/2020/09/03/smarts-1/">http://chenf-ai.github.io/2020/09/03/smarts-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://chenf-ai.github.io" target="_blank">Chenf's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/smarts/">smarts</a><a class="post-meta__tags" href="/tags/RL/">RL</a><a class="post-meta__tags" href="/tags/%E6%A8%A1%E6%8B%9F%E5%99%A8/">模拟器</a></div><div class="post_share"><div class="social-share" data-image="/img/smarts.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/09/03/smarts-2/"><img class="prev-cover" src="/img/smarts.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SMARTS文档阅读 其二</div></div></a></div><div class="next-post pull-right"><a href="/2020/08/31/Get-info-in-linux/"><img class="next-cover" src="/img/linux.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux中的小工具</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/09/03/smarts-2/" title="SMARTS文档阅读 其二"><img class="cover" src="/img/smarts.png"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-03</div><div class="title">SMARTS文档阅读 其二</div></div></a></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenf</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><a href="#" class="cd-top faa-float animated"></a><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

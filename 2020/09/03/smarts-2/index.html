@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SMARTS文档阅读 其二 | Chenf's Blog</title><meta name="description" content="关于SMARTS的一些细节的介绍..."><meta name="keywords" content="smarts,RL,模拟器"><meta name="author" content="Chenf"><meta name="copyright" content="Chenf"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="shortcut icon" href="/img/web_logo.png"><link rel="canonical" href="http://chenf-ai.github.io/2020/09/03/smarts-2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="SMARTS文档阅读 其二"><meta property="og:url" content="http://chenf-ai.github.io/2020/09/03/smarts-2/"><meta property="og:site_name" content="Chenf's Blog"><meta property="og:description" content="关于SMARTS的一些细节的介绍..."><meta property="og:image" content="http://chenf-ai.github.io/img/smarts.png"><meta property="article:published_time" content="2020-09-02T23:50:02.000Z"><meta property="article:modified_time" content="2020-09-03T07:04:22.204Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '',
+  date_suffix: {"one_hour":"刚刚","hours":"小时前","day":"天前"},
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-09-03 15:04:22'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.1.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/chenf_avater.png" onerror="onerror=null;src='/img/default_avatar.png'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EAgent%E7%9A%84%E7%BB%86%E8%8A%82"><span class="toc-number">1.</span> <span class="toc-text">关于Agent的细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AgentSpec"><span class="toc-number">1.1.</span> <span class="toc-text">AgentSpec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AgentInterface"><span class="toc-number">1.2.</span> <span class="toc-text">AgentInterface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Policy"><span class="toc-number">1.3.</span> <span class="toc-text">Policy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adapters-and-Spaces"><span class="toc-number">1.4.</span> <span class="toc-text">Adapters and Spaces</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EEnvironment%E7%9A%84%E7%BB%86%E8%8A%82"><span class="toc-number">2.</span> <span class="toc-text">关于Environment的细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HiwayEnv"><span class="toc-number">2.1.</span> <span class="toc-text">HiwayEnv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RLlibHiwayENv"><span class="toc-number">2.2.</span> <span class="toc-text">RLlibHiwayENv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Environment-features"><span class="toc-number">2.3.</span> <span class="toc-text">Environment features</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Scenario-Iterator"><span class="toc-number">2.3.1.</span> <span class="toc-text">Scenario Iterator</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EObservations%E5%92%8CActions"><span class="toc-number">3.</span> <span class="toc-text">关于Observations和Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Observations"><span class="toc-number">3.1.</span> <span class="toc-text">Observations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Action"><span class="toc-number">3.2.</span> <span class="toc-text">Action</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(/img/smarts.png)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Chenf's Blog</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">SMARTS文档阅读 其二</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-09-02T23:50:02.000Z" title="发表于 2020-09-03 07:50:02">2020-09-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-09-03T07:04:22.204Z" title="更新于 2020-09-03 15:04:22">2020-09-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E8%AE%B0-%E6%8A%80%E6%9C%AF%E7%AF%87/">杂记--技术篇</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="关于Agent的细节"><a href="#关于Agent的细节" class="headerlink" title="关于Agent的细节"></a>关于Agent的细节</h2><h3 id="AgentSpec"><a href="#AgentSpec" class="headerlink" title="AgentSpec"></a>AgentSpec</h3><ul>
+<li><p>SMARTS允许用户设计个性化的agents，每个<code>agent</code>是<code>AgentSpec</code>的实例化（准确来说，<code>agent</code>是<code>AgentSpec</code>的实例<code>agent_spec</code>通过<code>build_agent</code>方法得到）。</p>
+</li>
+<li><p><code>AgentSpec</code>的属性如下</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AgentSpec</span>:</span></span><br><span class="line">    <span class="comment"># This is optional because sometimes when building re-useable specs,</span></span><br><span class="line">    <span class="comment"># you don't know the agent interface ahead of time.</span></span><br><span class="line">    interface: AgentInterface = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># If you are training a policy with RLLib, you don't necessarily</span></span><br><span class="line">    <span class="comment"># want to set the policy as part of the AgentSpec, thus we leave</span></span><br><span class="line">    <span class="comment"># it as an optional field.</span></span><br><span class="line">    policy_builder: Callable[..., AgentPolicy] = <span class="literal">None</span></span><br><span class="line">    policy_params: Optional[Any] = <span class="literal">None</span></span><br><span class="line">    observation_adapter: Callable = <span class="keyword">lambda</span> obs: obs</span><br><span class="line">    action_adapter: Callable = <span class="keyword">lambda</span> act: act</span><br><span class="line">    reward_adapter: Callable = <span class="keyword">lambda</span> obs, reward: reward</span><br><span class="line">    info_adapter: Callable = <span class="keyword">lambda</span> reward, info: info</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="AgentInterface"><a href="#AgentInterface" class="headerlink" title="AgentInterface"></a>AgentInterface</h3><ul>
+<li><p><code>AgentInterface</code>决定了agent获得的环境信息是何种形式（即决定了<code>observation</code>的形式），同时决定了agent有怎样的动作空间。</p>
+</li>
+<li><p>注意到<code>AgentInterface</code>是<code>AgentSpec</code>的属性之一，所以<code>AgentInterface</code>实际上是<code>Agent</code>特异的。</p>
+</li>
+<li><p><code>AgentInterface</code>一般通过<code>from_type</code>方法实例化，下面给出一个实例化的样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">agent_interface = AgentInterface.from_type(</span><br><span class="line">	interface = AgentType.Standard,</span><br><span class="line">	max_episode_steps = <span class="number">1000</span>,</span><br><span class="line">	...</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，<code>AgentType</code>中包含了一下预先设定好的interface type，内容如下</p>
+<table>
+<thead>
+<tr>
+<th>keys</th>
+<th>AgentType.Full</th>
+<th>AgentType.StandardWithAbsoluteSteering</th>
+<th>AgentType.Standard</th>
+<th>AgentType.Laner</th>
+<th>AgentType.LanerWithSpeed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>max_episode_steps</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>neighborhood_vehicles</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>waypoints</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>drivable_area_grid_map</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ogm</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>rgb</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>lidar</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>action</td>
+<td>ActionSpaceType.Continuous</td>
+<td>ActionSpaceType.Continuous</td>
+<td>ActionSpaceType.ActuatorDynamic</td>
+<td>ActionSpaceType.Lane</td>
+<td>ActionSpaceType.LaneWithContinuousSpeed</td>
+</tr>
+</tbody></table>
+<p>其中<code>max_episode_steps</code>控制了<code>agent</code>每轮episode最多执行的行动步数，如果设置为<code>None</code>则没有最大步数限制。在<code>RLlib</code>中可以通过设置<code>horizon</code>达到同样的效果，但不是agent特异的。</p>
+</li>
+</ul>
+<h3 id="Policy"><a href="#Policy" class="headerlink" title="Policy"></a>Policy</h3><ul>
+<li><code>Policy</code>的设计应当和<code>AgentInterface</code>的设定是适配的，一方面<code>AgentInterface</code>决定了<code>Policy</code> <code>act</code>方法的输入，另一方面<code>Policy</code> <code>act</code>方法的输出应当和<code>AgentInterface</code>相吻合。</li>
+<li><code>Policy</code>可自行设计<code>AgentPolicy</code>的继承类，也可以通过<code>AgentPolicy.from_function</code>实现（这种方法需要在<code>policy_params</code>设定好<code>"policy_function"</code>的值）。</li>
+</ul>
+<h3 id="Adapters-and-Spaces"><a href="#Adapters-and-Spaces" class="headerlink" title="Adapters and Spaces"></a>Adapters and Spaces</h3><ul>
+<li><p>adapters用于对输入输出进行调整。以输入为例，传感器获得信息是比较丰富且复杂的，<code>Adapter</code>的作用是从raw information当中提取出部分信息作为<code>Policy</code>的输入（也就是输入的<code>observation</code>参数）。</p>
+</li>
+<li><p>下面给出一份样例代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Adapter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">observation_adapter</span>(<span class="params">env_observation</span>):</span></span><br><span class="line">    ego = env_observation.ego_vehicle_state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">        <span class="string">"speed"</span>: [ego.speed],</span><br><span class="line">        <span class="string">"steering"</span>: [ego.steering],</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"><span class="comment"># Associated Space</span></span><br><span class="line"><span class="comment"># You want to match the space to the adapter</span></span><br><span class="line">OBSERVATION_SPACE = gym.spaces.Dict(</span><br><span class="line">{</span><br><span class="line">    <span class="comment">## see http://gym.openai.com/docs/#spaces</span></span><br><span class="line">    <span class="string">"speed"</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">    <span class="string">"steering"</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+</ul>
+<h2 id="关于Environment的细节"><a href="#关于Environment的细节" class="headerlink" title="关于Environment的细节"></a>关于Environment的细节</h2><ul>
+<li><p>目前SMARTS提供两类训练环境，分别是<code>HiwayEnv</code>（<code>gym.env</code>风格的接口）和<code>RLlibHiwayEnv</code>（用于<code>RLlib</code>训练）。</p>
+<img src="/images/smarts_env.png" style="zoom:38%;">
+
+</li>
+</ul>
+<h3 id="HiwayEnv"><a href="#HiwayEnv" class="headerlink" title="HiwayEnv"></a>HiwayEnv</h3><ul>
+<li><p><code>HiwayEnv</code>的接口与<code>gym.Env</code>的接口一致，主要APIs包括<code>reset</code>, <code>step</code>, <code>close</code>。下面给出一个样例使用代码</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line"><span class="comment"># make env</span></span><br><span class="line">env = gym.make(</span><br><span class="line">        <span class="string">"smarts.env:hiway-v0"</span>, <span class="comment"># env entry name</span></span><br><span class="line">        scenarios=[scenario_path], <span class="comment"># a list of paths to folders of scenarios</span></span><br><span class="line">        agent_specs={AGENT_ID: agent_spec}, <span class="comment"># dictionary of agents to interact with the environment</span></span><br><span class="line">        headless=<span class="literal">False</span>, <span class="comment"># headless mode. False to enable Envision visualization of the environment</span></span><br><span class="line">        visdom=<span class="literal">False</span>, <span class="comment"># Visdom visualization of observations. False to disable. only supported in HiwayEnv.</span></span><br><span class="line">        seed=<span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step({AGENT_ID: agent_action})</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="RLlibHiwayENv"><a href="#RLlibHiwayENv" class="headerlink" title="RLlibHiwayENv"></a>RLlibHiwayENv</h3><ul>
+<li><p><code>RLlibHiwayEnv</code>继承类<code>MultiAgentEnv</code>，也包含<code>reset</code>, <code>step</code>, <code>close</code>的API。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> smarts.env.rllib_hiway_env <span class="keyword">import</span> RLlibHiWayEnv</span><br><span class="line"></span><br><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line">env = RLlibHiWayEnv(</span><br><span class="line">    config={</span><br><span class="line">        <span class="string">"scenarios"</span>: [scenario_path], <span class="comment"># scenarios list</span></span><br><span class="line">        <span class="string">"agent_specs"</span>: {AGENT_ID: agent}, <span class="comment"># add agents</span></span><br><span class="line">        <span class="string">"headless"</span>: <span class="literal">False</span>, <span class="comment"># enable envision gui, set False to enable.</span></span><br><span class="line">        <span class="string">"seed"</span>: <span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    }</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step({AGENT_ID: agent_action})</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+</ul>
+<h3 id="Environment-features"><a href="#Environment-features" class="headerlink" title="Environment features"></a>Environment features</h3><h4 id="Scenario-Iterator"><a href="#Scenario-Iterator" class="headerlink" title="Scenario Iterator"></a>Scenario Iterator</h4><ul>
+<li>如果<code>Env</code>config传入的参数包含多个scenarios，那么SMARTS会轮流使用这些scenarios, 简单而言在每次调用<code>env.reset()</code>后都会自动加载下一个scenario。</li>
+</ul>
+<h2 id="关于Observations和Actions"><a href="#关于Observations和Actions" class="headerlink" title="关于Observations和Actions"></a>关于Observations和Actions</h2><h3 id="Observations"><a href="#Observations" class="headerlink" title="Observations"></a>Observations</h3><p>Observations是传感器得到的信息，完整的raw observation包含如下的内容（<code>AgentType.Full</code>返回完整内容）。</p>
+<ul>
+<li><p><code>events</code> : 包含如下内容的 <code>NamedTuple</code> 。</p>
+<blockquote>
+<ul>
+<li><code>collisions</code> - collisions the vehicle has been involved with other vehicles (if any)</li>
+<li><code>off_road</code> - <code>True</code> if the vehicle is off the road</li>
+<li><code>off_route</code> - <code>True</code> if the vehicle has off its routes</li>
+<li><code>reached_goal</code> - <code>True</code> if the vehicle has reached its goal</li>
+<li><code>reached_max_episode_steps</code> - <code>True</code> if the vehicle has reached its max episode steps</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>ego_vehicle_state</code> : 名为 <code>VehicleObservation</code>的 <code>NamedTuple</code> ，其中包含了本体Agent的如下信息。</p>
+<blockquote>
+<ul>
+<li><code>id</code> - a string identifier for this vehicle</li>
+<li><code>position</code> - 3D numpy array (x, y, z) of vehicle position, x is right direction, and y is up direction from envision</li>
+<li><code>bounding_box</code> - <code>BoundingBox</code> data class for the <code>length</code>, <code>width</code>, <code>height</code> of the vehicle.</li>
+<li><code>heading</code> - vehicle heading in radians, range(-pi, pi), 0 is up direction from envision</li>
+<li><code>speed</code> - agent speed in m/s</li>
+<li><code>steering</code> - angle of front wheels in radians</li>
+<li><code>yaw_rate</code> - rotational speed in radian per second</li>
+<li><code>lane_id</code> - a globally unique identifier of the lane under this vehicle</li>
+<li><code>lane_index</code> - index of the lane under this vehicle, right most lane has index 0 and the index increments to the left</li>
+<li><code>linear_velocity</code> - A 3D numpy array of vehicle velocities in body coordinate frame</li>
+<li><code>angular_velocity</code> - A 3D numpy array of angular velocity vector</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>neighborhood_vehicle_states</code> :  <code>VehicleObservation</code>的列表。</p>
+<blockquote>
+<ul>
+<li><code>position</code>, <code>bounding_box</code>, <code>heading</code>, <code>speed</code>, <code>lane_id</code>, <code>lane_index</code> - the same as with <code>ego_vehicle_state</code></li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>GridMapMetadata</code> : 包含observation maps的如下信息。</p>
+<blockquote>
+<ul>
+<li><code>created_at</code> - time at which the map was loaded</li>
+<li><code>resolution</code> - map resolution in world-space-distance/cell</li>
+<li><code>width</code> - map width in # of cells</li>
+<li><code>height</code> - map height in # of cells</li>
+<li><code>camera_pos</code> - camera position when project onto the map</li>
+<li><code>camera_heading_in_degrees</code> - camera rotation angle along z-axis when project onto the map</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>top_down_rgb</code> : 关于本体Agent的鸟瞰图以及image的元数据信息。</p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - a RGB image (default 256x256) with the ego vehicle at the center</li>
+</ul>
+<p><img src="/images/smarts_road.png"></p>
+</blockquote>
+</li>
+<li><p><code>occupancy_grid_map</code> : 提供observation image以及元数据 。</p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - A <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Occupancy_grid_mapping">OGM</a> (default 256x256) around the ego vehicle</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>drivable_area_grid_map</code> : 提供observation image以及元数据。 </p>
+<blockquote>
+<ul>
+<li><code>metadata</code> - <code>GridMapMetadata</code></li>
+<li><code>data</code> - A grid map (default 256x256) that shows the static drivable area around the ego vehicle</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>waypoint_paths</code> : 本体Agent前方的航路点列表，显示前方的潜在路线。列表中的每个元素都是<code>Waypoint</code>的具有以下字段的实例，</p>
+<blockquote>
+<ul>
+<li><code>id</code> - an integer identifier for this waypoint</li>
+<li><code>pos</code> - a numpy array (x, y) center point along the lane</li>
+<li><code>heading</code> - heading angle of lane at this point (radians)</li>
+<li><code>lane_width</code> - width of lane at this point (meters)</li>
+<li><code>speed_limit</code> - lane speed in m/s</li>
+<li><code>lane_id</code> - a globally unique identifier of lane under waypoint</li>
+<li><code>right_of_way</code> - <code>True</code> if this waypoint has right of way, <code>False</code> otherwise</li>
+<li><code>lane_index</code> - index of the lane under this waypoint, right most lane has index 0 and the index increments to the left</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h3><ul>
+<li><code>ActionSpaceType.Continuous</code>：具有油门，制动器，绝对转向角的连续作用空间。</li>
+<li><code>ActionSpaceType.ActuatorDynamic</code>：具有油门，制动器，转向率的连续作用空间。转向率是指每秒应用于当前转向角的转向角变化量（正或负）。</li>
+<li><code>ActionSpaceType.Lane</code>：字符串的离散车道动作空间，包括“ keep_lane”，“ slow_down”，“ change_lane_left”，“ change_lane_right”。</li>
+<li><code>ActionSpaceType.LaneWithContinuousSpeed</code>：对于lane_change具有一个整数元组，对于target_speed具有一个浮点数。</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emojis')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenf</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://chenf-ai.github.io/2020/09/03/smarts-2/">http://chenf-ai.github.io/2020/09/03/smarts-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://chenf-ai.github.io" target="_blank">Chenf's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/smarts/">smarts</a><a class="post-meta__tags" href="/tags/RL/">RL</a><a class="post-meta__tags" href="/tags/%E6%A8%A1%E6%8B%9F%E5%99%A8/">模拟器</a></div><div class="post_share"><div class="social-share" data-image="/img/smarts.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/09/03/smarts-1/"><img class="next-cover" src="/img/smarts.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SMARTS文档阅读 其一</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/09/03/smarts-1/" title="SMARTS文档阅读 其一"><img class="cover" src="/img/smarts.png"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-03</div><div class="title">SMARTS文档阅读 其一</div></div></a></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenf</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><a href="#" class="cd-top faa-float animated"></a><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
