@@ -779,7 +779,7 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
   </entry>
   <entry>
     <title>overcome &quot;CEM&quot;</title>
-    <url>/2020/03/20/CEM/</url>
+    <url>/2021/03/20/CEM/</url>
     <content><![CDATA[<h3 id="关于CEM算法"><a href="#关于CEM算法" class="headerlink" title="关于CEM算法"></a>关于CEM算法</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
 <li>CEM (cross entropy method) 算法是一种无梯度的优化算法。对于一般的优化问题，我们可以认为问题给定了优化的目标$S(M)$，其中$M$是我们想要优化的参数，即整个优化过程就是为了求解：<br>$$<br>M^* = \mathop{\arg\max}_{M}S(M)<br>$$<br>对于许多优化问题，尤其是凸优化问题，我们能够用梯度优化算法求解得到$M^*$。而CEM算法不同于梯度算法，他不借助问题的结构（这里指目标函数$S(·)$的表达式），而是将把目标函数$S(·)$作为黑盒求解。</li>
 </ul>
