@@ -13,172 +13,28 @@
 <li>在使用tmux时，下方底部会显示一行与session, window有关的创建信息。</li>
 </ul>
 <h3 id="tmux的基本命令——shell界面使用"><a href="#tmux的基本命令——shell界面使用" class="headerlink" title="tmux的基本命令——shell界面使用"></a>tmux的基本命令——shell界面使用</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用tmux，对应着开启一个server并同时开启一个session</span></span><br><span class="line">tmux</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示所有的session</span></span><br><span class="line">tmux ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 新建session，若不指定-s参数则不指定session的名称</span></span><br><span class="line">tmux new [-s &lt;session-name&gt;]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 回到某个session，若不指定-t参数则回到上一个session</span></span><br><span class="line">tmux a/attach [-t/target-session &lt;session-name&gt;]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭指定的session</span></span><br><span class="line">tmux kill-session -t session-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭除指定session外所有的session</span></span><br><span class="line">tmux kill-session -a -t session-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭所有session，注意当所有session均关闭时意味着接触tmux形态</span></span><br><span class="line">tmux kill-server</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 重命名session</span></span><br><span class="line">tmux rename -t old_session_name new_session_name</span><br></pre></td></tr></table></figure>
-
 <h3 id="相关快捷键命令——在tmux内部使用"><a href="#相关快捷键命令——在tmux内部使用" class="headerlink" title="相关快捷键命令——在tmux内部使用"></a>相关快捷键命令——在tmux内部使用</h3><ul>
 <li><p>可通过修改~/.tmux.conf配置文件来修改bind-key</p>
 </li>
 <li><p>使用Ctrl + b在tmux内部进入快捷键模式</p>
 </li>
 <li><p>基本快捷键</p>
-<table>
-<thead>
-<tr>
-<th>快捷键（这里指先使用Ctrl+b后再使用的快捷键）</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>?</td>
-<td>相当于-help参数，列出所有的快捷键信息</td>
-</tr>
-<tr>
-<td>:</td>
-<td>在底部出现特殊的命令行（有颜色强调），该命令行可不使用tmux前缀而使用上述基本命令</td>
-</tr>
-<tr>
-<td>[</td>
-<td>进入复制模式，空格键确定开始复制，类似vim进行区域选择，最后使用回车键确定选择完毕并退出（这里可能需要在配置文件中进行配置才可使用，具体见<strong>其他说明</strong>）。与vim相区别使用:起到goto line的作用</td>
-</tr>
-<tr>
-<td>]</td>
-<td>使用最近一次”[“快捷键复制的内容进行粘贴</td>
-</tr>
-</tbody></table>
+<p>| 快捷键（这里指先使用Ctrl+b后再使用的快捷键） | 功能                                                         |<br>| —————————————————————— | —————————————————————————————— |<br>| ?                                            | 相当于-help参数，列出所有的快捷键信息                        |<br>| :                                            | 在底部出现特殊的命令行（有颜色强调），该命令行可不使用tmux前缀而使用上述基本命令 |<br>| [                                            | 进入复制模式，空格键确定开始复制，类似vim进行区域选择，最后使用回车键确定选择完毕并退出（这里可能需要在配置文件中进行配置才可使用，具体见<strong>其他说明</strong>）。与vim相区别使用:起到goto line的作用 |<br>| ]                                            | 使用最近一次”[“快捷键复制的内容进行粘贴                      |</p>
 </li>
 <li><p>与session有关的快捷键</p>
-<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>d</td>
-<td>脱离当前会话</td>
-</tr>
-<tr>
-<td>Ctrl+z</td>
-<td>挂起当前会话</td>
-</tr>
-<tr>
-<td>r</td>
-<td>强制重绘未脱离的会话（测试使用时发现没有达到效果）</td>
-</tr>
-<tr>
-<td>s</td>
-<td>显示所有会话，通过上下选择以及回车键切换</td>
-</tr>
-</tbody></table>
+<p>| 快捷键 | 功能                                                         |<br>| ——— | ————————————————————————— |<br>| d      | 脱离当前会话                                       |<br>| Ctrl+z | 挂起当前会话                                       |<br>| r      | 强制重绘未脱离的会话（测试使用时发现没有达到效果） |<br>| s      | 显示所有会话，通过上下选择以及回车键切换           |</p>
 </li>
 <li><p>与window有关的快捷键</p>
-<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>c</td>
-<td>创建新的窗口</td>
-</tr>
-<tr>
-<td>&amp;</td>
-<td>关闭当前窗口</td>
-</tr>
-<tr>
-<td>数字键（无需考虑2位数的冲突问题，因为单个session对应的窗口有个数限制）</td>
-<td>切换至制定的窗口</td>
-</tr>
-<tr>
-<td>p</td>
-<td>切换至上一个窗口</td>
-</tr>
-<tr>
-<td>n</td>
-<td>切换至下一个窗口</td>
-</tr>
-<tr>
-<td>w</td>
-<td>展示窗口列表，通过上下键选择并通过回车键选定（这里的窗口列表包括所有会话的所有窗口）</td>
-</tr>
-<tr>
-<td>,</td>
-<td>重命名当前窗口</td>
-</tr>
-<tr>
-<td>.</td>
-<td>修改当前窗口编号</td>
-</tr>
-<tr>
-<td>f</td>
-<td>在所有窗口中进行制定文本的查找</td>
-</tr>
-</tbody></table>
+<p>| 快捷键                                                       | 功能                                                         |<br>| —————————————————————————————— | —————————————————————————————— |<br>| c                                                            | 创建新的窗口                                                 |<br>| &amp;                                                            | 关闭当前窗口                                                 |<br>| 数字键（无需考虑2位数的冲突问题，因为单个session对应的窗口有个数限制） | 切换至制定的窗口                                             |<br>| p                                                            | 切换至上一个窗口                                             |<br>| n                                                            | 切换至下一个窗口                                             |<br>| w                                                            | 展示窗口列表，通过上下键选择并通过回车键选定（这里的窗口列表包括所有会话的所有窗口） |<br>| ,                                                            | 重命名当前窗口                                               |<br>| .                                                            | 修改当前窗口编号                                             |<br>| f                                                            | 在所有窗口中进行制定文本的查找                               |</p>
 </li>
 <li><p>与pane有关的操作</p>
-<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>“</td>
-<td>将当前面板划分为上下两部分</td>
-</tr>
-<tr>
-<td>%</td>
-<td>将当前面板划分为左右两部分</td>
-</tr>
-<tr>
-<td>x</td>
-<td>关闭当前面板</td>
-</tr>
-<tr>
-<td>!</td>
-<td>将当前面板抽出单独作为一个新的窗口</td>
-</tr>
-<tr>
-<td>Ctrl+方向键</td>
-<td>以１个单元格为单位移动来调整当前pane的size</td>
-</tr>
-<tr>
-<td>Alt+方向键</td>
-<td>以５个单元格为单位移动来调整当前pane的size</td>
-</tr>
-<tr>
-<td>q</td>
-<td>显示面板编号</td>
-</tr>
-<tr>
-<td>o</td>
-<td>在当前窗口中选择该面板的下一个面板</td>
-</tr>
-<tr>
-<td>方向键</td>
-<td>移动选择面板</td>
-</tr>
-<tr>
-<td>{</td>
-<td>向前置换当前面板</td>
-</tr>
-<tr>
-<td>}</td>
-<td>向后置换当前面板</td>
-</tr>
-<tr>
-<td>z</td>
-<td>最大化当前面板，再使用一次会恢复正常</td>
-</tr>
-</tbody></table>
+<p>| 快捷键 | 功能                                                         |<br>| ——— | ————————————————————————— |<br>| “           | 将当前面板划分为上下两部分                 |<br>| %           | 将当前面板划分为左右两部分                 |<br>| x           | 关闭当前面板                               |<br>| !           | 将当前面板抽出单独作为一个新的窗口         |<br>| Ctrl+方向键 | 以１个单元格为单位移动来调整当前pane的size |<br>| Alt+方向键  | 以５个单元格为单位移动来调整当前pane的size |<br>| q           | 显示面板编号                               |<br>| o           | 在当前窗口中选择该面板的下一个面板         |<br>| 方向键      | 移动选择面板                               |<br>| {           | 向前置换当前面板                           |<br>| }           | 向后置换当前面板                           |<br>| z           | 最大化当前面板，再使用一次会恢复正常       |</p>
 </li>
 </ul>
 <h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><ul>
 <li><p>使用”Ctrl+b [“进入复制模式后如果要使用vim的快捷键，如果发现无法使用的话需要在~/.tmux.conf配置文件中添加如下设置</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use vim keybindings in copy mode</span></span><br><span class="line">setw -g mode-keys vi</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use vim keybindings in copy mode</span></span><br><span class="line">setw -g mode-keys vi</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><ul>
 <li><p>该blog参考下列文章</p>
@@ -196,13 +52,59 @@
       </tags>
   </entry>
   <entry>
+    <title>overcome &quot;CEM&quot;</title>
+    <url>/2021/03/20/CEM/</url>
+    <content><![CDATA[<h3 id="关于CEM算法"><a href="#关于CEM算法" class="headerlink" title="关于CEM算法"></a>关于CEM算法</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li>CEM (cross entropy method) 算法是一种无梯度的优化算法。对于一般的优化问题，我们可以认为问题给定了优化的目标$S(M)$，其中$M$是我们想要优化的参数，即整个优化过程就是为了求解：<script type="math/tex; mode=display">
+M^* = \mathop{\arg\max}_{M}S(M)</script>对于许多优化问题，尤其是凸优化问题，我们能够用梯度优化算法求解得到$M^*$。而CEM算法不同于梯度算法，他不借助问题的结构（这里指目标函数$S(·)$的表达式），而是将把目标函数$S(·)$作为黑盒求解。</li>
+</ul>
+<h4 id="求解过程"><a href="#求解过程" class="headerlink" title="求解过程"></a>求解过程</h4><ul>
+<li><p>CEM的整个求解过程实际上是在维护参数$M$的一个分布$f$，算法起初初始化一个分布$f<em>0$，之后迭代得到最终分布$f</em>{T}$。从$f_0$到$f_T$的区别在于初始化的$f_0$可能是很差的（从$f_0$分布很难采样得到最优参数$M^<em>$），而从$f_0$到$f_T$的迭代过程可以理解为让分布越来越好（使得从分布中采样得到$M^</em>$的概率逐渐增大，或者说采到好样本的概率逐渐增大）。</p>
+</li>
+<li><p>另外还有一个细节是，不管是初始化$f<em>0$，还是从$f_t$到$f</em>{t+1}$的迭代，我们实际上都得先假设一个分布类$\mathcal{F}$。这是什么意思？事实上，对分布进行调整往往都是对分布的参数进行调整（例如调整高斯分布的均值和方差），而对分布进行初始化，我们也得先确定分布类，然后初始化分布参数。在实际应用CEM算法的过程中，我们常常一般高斯分布。</p>
+</li>
+<li><p>具体的算法过程如下（以高斯分布的集合作为$\mathcal{F}$为例）：</p>
+<ul>
+<li><p>初始化采样数$n$和筛选因子$\rho$（含义后续介绍），确定初始分布$f_0$的参数。</p>
+</li>
+<li><p>在第$t$轮时，依据分布$f_{t-1}$采样得到$n$个样本${M_1, M_2, …, M_n}$，计算相应的目标函数值$S(M_i), 1\leq i\leq n$，选取其中最大的前$\lfloor \rho n\rfloor$个样本，得到样本索引$I \subseteq {1, 2, …, n}$。进行如下更新：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_{t} &= \frac{\sum_{i\in I}M_i}{|I|}\\
+\sigma_{t}^2 &=\frac{\sum_{i\in I}(M_i - \mu_t)^T(M_i - \mu_t)}{|I|}
+\end{aligned}</script></li>
+<li><p><strong>注意</strong>：在更新公式中，$(M_i - \mu_t)$项增加了转置，因为参数$M_i$大概率是个向量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="CEM算法和强化学习"><a href="#CEM算法和强化学习" class="headerlink" title="CEM算法和强化学习"></a>CEM算法和强化学习</h3><ul>
+<li>CEM是一种无梯度优化算法，它并不局限于具体的任务或场景。对于强化学习而言，若对policy进行参数化表示，那么配合某种<code>policy evaluation</code>算法即利用CEM对policy的参数进行优化。</li>
+<li>实践中证明，在强化学习任务中直接使用CEM算法很容易收敛到局部最优，因此一般使用noisy cross entropy method，它和CEM算法的区别在于：NCEM在对分布参数进行迭代更新时额外加上一个噪声，以此避免过早地陷入局部最优。</li>
+</ul>
+<h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><ul>
+<li><p>参考文献</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.80.6681%26rep%3Drep1%26type%3Dpdf">Learning Tetris Using the NoisyCross-Entropy Method</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>ML笔记</category>
+      </categories>
+      <tags>
+        <tag>RL</tag>
+        <tag>optimization</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux中的终端PATH配置</title>
     <url>/2020/02/22/Change-PATH-in-Linux/</url>
     <content><![CDATA[<h3 id="修改终端环境变量的方法"><a href="#修改终端环境变量的方法" class="headerlink" title="修改终端环境变量的方法"></a>修改终端环境变量的方法</h3><ul>
 <li><p>在此次打开终端后，可以使用export命令来设置环境变量，例如南哪大学的ics课程中可以通过export命令设置STUID环境变量来进行PA提交。</p>
 </li>
 <li><p>可以通过修改~/目录下隐藏的.bashrc或.zshrc文件来设置环境变量，例如下面设置LOVE_PERSON环境变量为QZH。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export LOVE_PERSON=QZH</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export LOVE_PERSON=QZH</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>注意环境变量名一般全部大写。</p>
 </li>
 </ul>
@@ -213,7 +115,6 @@
 </li>
 <li><p>更改PATH变量值可以在终端中输入</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">PATH=$PATH:/some/directory</span><br></pre></td></tr></table></figure>
-
 <p>这样会相应地添加后面的目录到PATH变量中，注意这里是添加而不会删除$PATH中其他的所有目录。</p>
 <p>上面的修改方式仅设置此次打开终端后的操作，也在.bashrc/.zshrc中直接修改PATH变量的值，这样在下次打开终端后设置依然有效。</p>
 </li>
@@ -221,11 +122,9 @@
 <h3 id="alias别名"><a href="#alias别名" class="headerlink" title="alias别名"></a>alias别名</h3><ul>
 <li><p>修改.bashrc/.zshrc可设置别名，很好理解也很有用，下面从例子来看：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">alias rm = &#x27;rm -i&#x27;</span><br><span class="line">alias cp = &#x27;cp -i&#x27;</span><br></pre></td></tr></table></figure>
-
-<p>注意：通过该方法可以将rm更改为将文件或者目录放置到指定的目录下，然后定期删除该目录，这样可以防止错删文件。</p>
+<p>注意：通过该方法可以将rm更改为将文件或者目录放置到指定的目录下，然后定期删除该目录，这样可以防止错删文件。<br><strong>- i files</strong>指only include the following files</p>
 </li>
 </ul>
-<p><strong>- i files</strong>指only include the following files</p>
 <h3 id="提示符"><a href="#提示符" class="headerlink" title="提示符"></a>提示符</h3><ul>
 <li>提示符指的是终端前的格式，合理的提示符可以帮助用户更好的工作，通过修改.bashrc/.zshrc中的内容也可以更改终端提示符的格式。</li>
 </ul>
@@ -243,7 +142,7 @@
     <url>/2020/08/31/Get-info-in-linux/</url>
     <content><![CDATA[<h3 id="调节音量"><a href="#调节音量" class="headerlink" title="调节音量"></a>调节音量</h3><h4 id="AlsaMixer"><a href="#AlsaMixer" class="headerlink" title="AlsaMixer"></a>AlsaMixer</h4><ul>
 <li><p>AlsaMixer界面如下图所示</p>
-<p><img src="/images/alsamixer.png"></p>
+<p><img src="/images/alsamixer.png" alt=""></p>
 </li>
 <li><p>在终端键入alsamixer即可进入alsamixer的使用，进入使用界面后根据界面提示调节音量，基本操作包括</p>
 <ul>
@@ -256,12 +155,12 @@
 <h3 id="查看电量"><a href="#查看电量" class="headerlink" title="查看电量"></a>查看电量</h3><ul>
 <li><p>电量信息存储在/sys/目录下的某个文件名为capacity的文件中，可使用如下命令得到电量信息</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /sys/ -name capacity -<span class="built_in">exec</span> cat &#123;&#125; \;</span><br></pre></td></tr></table></figure>
-
 <p>为了方便可利用alias设置该命令别名为capacity（写入~/.bashrc当中）。</p>
 <p>注意：使用该方法只能得到电量百分比信息，且可能会出现错误信息（因为/sys/下的某些文件可能没有权限访问）。</p>
 </li>
 <li><p>使用如下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">upower -i /org/freedesktop/UPower/devices/battery_BAT0</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">upower -i /org/freedesktop/UPower/devices/battery_BAT0</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -275,7 +174,6 @@
     <title>linux系统调用:atexit</title>
     <url>/2020/04/06/Intro-of-atexit/</url>
     <content><![CDATA[<h3 id="atexit函数申明"><a href="#atexit函数申明" class="headerlink" title="atexit函数申明"></a>atexit函数申明</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">atexit</span><span class="params">(<span class="keyword">void</span> (*function)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></table></figure>
-
 <h3 id="atexit函数简单介绍"><a href="#atexit函数简单介绍" class="headerlink" title="atexit函数简单介绍"></a>atexit函数简单介绍</h3><ul>
 <li>atexit函数用于注册回调函数，回调函数在程序正常终止时被调用。</li>
 <li>回调函数的执行顺序是注册顺序的逆序，调用时不传入参数。</li>
@@ -288,9 +186,6 @@
 <li>main函数结束返回。</li>
 </ul>
 <h3 id="样例代码"><a href="#样例代码" class="headerlink" title="样例代码"></a>样例代码</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bye</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;That was all, folks\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123; </span><br><span class="line">  <span class="keyword">long</span> a;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  a = sysconf(_SC_ATEXIT_MAX);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;ATEXIT_MAX = %ld\n&quot;</span>, a);</span><br><span class="line"></span><br><span class="line">  i = atexit(bye);</span><br><span class="line">  <span class="keyword">if</span> (i != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;cannot set exit function\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 ]]></content>
       <categories>
         <category>linux笔记</category>
@@ -306,7 +201,6 @@
     <content><![CDATA[<h3 id="dlopen的身份"><a href="#dlopen的身份" class="headerlink" title="dlopen的身份"></a>dlopen的身份</h3><ul>
 <li><p>dlopen用于加载动态分享库:happy:，其函数声明如下</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">dlopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span> *handle)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>参数filename指定了需要加载的分享库，flags指定了加载的模式。</p>
 </li>
 <li><p>执行成功时，函数返回一个共享库文件的handle；若执行出错，则返回NULL。</p>
@@ -345,7 +239,8 @@
 </ul>
 </li>
 <li><p>RTFM标准样例代码</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *handle;</span><br><span class="line">    <span class="keyword">double</span> (*cosine)(<span class="keyword">double</span>);</span><br><span class="line">    <span class="keyword">char</span> *error;</span><br><span class="line"></span><br><span class="line">    handle = dlopen(LIBM_SO, RTLD_LAZY);</span><br><span class="line">    <span class="keyword">if</span> (!handle) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s\n&quot;</span>, dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dlerror();    <span class="comment">/* Clear any existing error */</span></span><br><span class="line"></span><br><span class="line">    cosine = (<span class="keyword">double</span> (*)(<span class="keyword">double</span>)) dlsym(handle, <span class="string">&quot;cos&quot;</span>);</span><br><span class="line"></span><br><span class="line">    error = dlerror();</span><br><span class="line">    <span class="keyword">if</span> (error != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s\n&quot;</span>, error);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>, (*cosine)(<span class="number">2.0</span>));</span><br><span class="line">    dlclose(handle);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *handle;</span><br><span class="line">    <span class="keyword">double</span> (*cosine)(<span class="keyword">double</span>);</span><br><span class="line">    <span class="keyword">char</span> *error;</span><br><span class="line"></span><br><span class="line">    handle = dlopen(LIBM_SO, RTLD_LAZY);</span><br><span class="line">    <span class="keyword">if</span> (!handle) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s\n&quot;</span>, dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dlerror();    <span class="comment">/* Clear any existing error */</span></span><br><span class="line"></span><br><span class="line">    cosine = (<span class="keyword">double</span> (*)(<span class="keyword">double</span>)) dlsym(handle, <span class="string">&quot;cos&quot;</span>);</span><br><span class="line"></span><br><span class="line">    error = dlerror();</span><br><span class="line">    <span class="keyword">if</span> (error != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s\n&quot;</span>, error);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>, (*cosine)(<span class="number">2.0</span>));</span><br><span class="line">    dlclose(handle);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -361,7 +256,8 @@
     <url>/2020/03/27/Intro-of-dup/</url>
     <content><![CDATA[<h3 id="dup介绍"><a href="#dup介绍" class="headerlink" title="dup介绍"></a>dup介绍</h3><ul>
 <li><p>dup的函数声明如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>dup系统调用函数会创建一个文件描述符oldfd的拷贝，具体而言，dup会从低位开始寻找一个unused fd作为拷贝的fd。</p>
 </li>
 <li><p>成功返回后，oldfd and newfd may be used interchangeably，意思是两个文件描述符在某种意义上是一致的（或者说在使用上是可互换的），他们refer to相同的open file description，具有一致的文件偏移量和文件状态标志（file offset and file status flags）；但两者并不共享文件描述符标志（file descriptor flags）。</p>
@@ -369,7 +265,8 @@
 </ul>
 <h3 id="dup2介绍"><a href="#dup2介绍" class="headerlink" title="dup2介绍"></a>dup2介绍</h3><ul>
 <li><p>dup2的函数声明</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>dup2与dup类似，区别在于并不从最低位开始寻找unused fd，而是使用参数制定的newfd。</p>
 </li>
 <li><p>如果newfd已经打开，那么首先会close然后reuse，注意这一过程必须是原子的。例如如果用close加dup来实现这一过程可能会存在数据竞争的情况，在close和dup之间newfd被复用。</p>
@@ -395,9 +292,11 @@
     <content><![CDATA[<h3 id="exec-family成员"><a href="#exec-family成员" class="headerlink" title="exec family成员"></a>exec family成员</h3><p>包括例如<code>execl</code>,<code>execlp</code>,<code>execle</code>,<code>execv</code>,<code>execvp</code>,<code>execvpe</code>等在内。</p>
 <h3 id="execve-VS-execvp"><a href="#execve-VS-execvp" class="headerlink" title="execve VS. execvp"></a>execve VS. execvp</h3><ul>
 <li><p>execve的函数声明如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>execvp的函数声明如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>execve中的filename参数需要完整的文件路径(例如/bin/ls)，且需要通过envp参数指定环境变量。而execvp只需传入简要的文件名(例如ls)，且不需要指定环境变量。</p>
 </li>
 <li><p>argv和envp都是字符串数组，且数组最后一个元素必须为NULL，其中argv[0]需要和被执行文件相关(一般即为执行的文件名称,例如ls)。</p>
@@ -405,7 +304,8 @@
 </ul>
 <h3 id="environ变量"><a href="#environ变量" class="headerlink" title="environ变量"></a>environ变量</h3><ul>
 <li><p>变量声明</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>一般会与execve搭配使用。</p>
 </li>
 </ul>
@@ -423,7 +323,6 @@
     <url>/2020/04/13/Intro-of-mkstemp-family/</url>
     <content><![CDATA[<h3 id="mkstemp精彩家族"><a href="#mkstemp精彩家族" class="headerlink" title="mkstemp精彩家族"></a>mkstemp精彩家族</h3><p>精彩家族声明演义</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkstemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkostemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkstemps</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> suffixlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkostemps</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>, <span class="keyword">int</span> suffixlen, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <h3 id="Quick-Use-Review"><a href="#Quick-Use-Review" class="headerlink" title="Quick Use Review"></a>Quick Use Review</h3><ul>
 <li>mkstemp函数传入字符串参数，要求最后6个字符为XXXXXX。</li>
 <li>mkstemps函数允许创建文件名在XXXXXX后面有后缀，后缀字符串通过第二个参数传入。</li>
@@ -445,18 +344,15 @@
 </li>
 <li><p>函数声明为</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> pipefd[<span class="number">2</span>])</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>当函数pipe成功返回时，数组pipefd分别被赋值为两个文件描述符，pipefd[0]为管道的读端口，pipefd[1]是管道的写端口。</p>
 </li>
 <li><p>如果函数返回0则代表调用成功，返回-1代表调用失败。</p>
 </li>
 </ul>
 <h3 id="样例代码"><a href="#样例代码" class="headerlink" title="样例代码"></a>样例代码</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> pipefd[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">pid_t</span> cpid;</span><br><span class="line">    <span class="keyword">char</span> buf;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Usage: %s &lt;string&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pipe(pipefd) == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;pipe&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cpid = fork();</span><br><span class="line">    <span class="keyword">if</span> (cpid == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;fork&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cpid == <span class="number">0</span>) &#123;    <span class="comment">/* Child reads from pipe */</span></span><br><span class="line">        close(pipefd[<span class="number">1</span>]);          <span class="comment">/* Close unused write end */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (read(pipefd[<span class="number">0</span>], &amp;buf, <span class="number">1</span>) &gt; <span class="number">0</span>)</span><br><span class="line">            write(STDOUT_FILENO, &amp;buf, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        write(STDOUT_FILENO, <span class="string">&quot;\n&quot;</span>, <span class="number">1</span>);</span><br><span class="line">        close(pipefd[<span class="number">0</span>]);</span><br><span class="line">        _exit(EXIT_SUCCESS);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;            <span class="comment">/* Parent writes argv[1] to pipe */</span></span><br><span class="line">        close(pipefd[<span class="number">0</span>]);          <span class="comment">/* Close unused read end */</span></span><br><span class="line">        write(pipefd[<span class="number">1</span>], argv[<span class="number">1</span>], <span class="built_in">strlen</span>(argv[<span class="number">1</span>]));</span><br><span class="line">        close(pipefd[<span class="number">1</span>]);          <span class="comment">/* Reader will see EOF */</span></span><br><span class="line">        wait(<span class="literal">NULL</span>);                <span class="comment">/* Wait for child */</span></span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上述程序的功能是假借（这里的假就是借的意思）一个数据管道，使用fork系统调用创建子进程，在子进程中将命令行参数写入管道，然后在父进程中读取管道并标准输出，体现出的效果就是将命令行参数打印（注意规定了参数只有一个）。</p>
 <p>下面给出该代码的一些使用案例（已编译为pipetest二进制文件）</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./pipetest CfLoveQzh</span><br><span class="line">Usage: ./pipe_test &lt;string&gt;</span><br><span class="line">$ ./pipetest CfLoveQzh</span><br><span class="line">CfLoveQzh</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>linux笔记</category>
@@ -470,9 +366,7 @@
     <title>pstree使用简单介绍</title>
     <url>/2020/02/05/Intro-of-pstree/</url>
     <content><![CDATA[<h3 id="pstree命令的功能"><a href="#pstree命令的功能" class="headerlink" title="pstree命令的功能"></a>pstree命令的功能</h3><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">用树状图的形式展示进程，能够体现进程之间的父子派生关系，包含进程号信息，是直观展示进程信息的命令行工具。</span><br></pre></td></tr></table></figure>
-
 <h3 id="pstree命令的相关选项"><a href="#pstree命令的相关选项" class="headerlink" title="pstree命令的相关选项"></a>pstree命令的相关选项</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-a:完整地展示每个进程的指令，包括路径，参数等。</span><br><span class="line">-c:如果不指定-c选项，则树状图会对一些内容进行折叠；指定-c选项后，会将内容展开。</span><br><span class="line">-h:在列出进程树状图的同时标明当前进程。</span><br><span class="line">-H &lt;进程编号&gt;:类似-h同样地会标明某一进程，但标明的进程是由进程编号指定的进程。</span><br><span class="line">-l:采用长列输出，在默认情况下，输出会根据其他的设置约束截断，指定-l参数后可以使得树状图完整输出。</span><br><span class="line">-n:按照进程编号排序，默认按照名称字典排序。</span><br><span class="line">-p:在展示树状图时展示进程编号。</span><br><span class="line">-u:展示用户名称。</span><br></pre></td></tr></table></figure>
-
 <h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><p>该Blog参考下面文章内容</p>
 <ul>
 <li><a href="https://blog.csdn.net/yexiangCSDN/article/details/80799600">https://blog.csdn.net/yexiangCSDN/article/details/80799600</a></li>
@@ -489,15 +383,14 @@
   <entry>
     <title>My first Blog!</title>
     <url>/2020/01/18/my-first-essay/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://chenf-ai.github.io/">Chenf’s 小站</a>! </p>
+    <content><![CDATA[<p>Welcome to <a href="https://chenf-ai.github.io">Chenf’s 小站</a>! </p>
 <p>chenf —— a dream seeker in fields of AI and cs. </p>
 <h2 id="站牌-2020-01-18"><a href="#站牌-2020-01-18" class="headerlink" title="站牌 (2020/01/18)"></a>站牌 (2020/01/18)</h2><pre><code>感谢您来到Chenf的小站，这是他的第一次写Blog。
 
 正如您所见，这个小站空空如也，什么都没有～
 
 Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率，希望未来他能够让这个小站更加充实……
-</code></pre>
-<h2 id="其他-2021-03-04"><a href="#其他-2021-03-04" class="headerlink" title="其他 (2021/03/04)"></a>其他 (2021/03/04)</h2><ul>
+</code></pre><h2 id="其他-2021-03-04"><a href="#其他-2021-03-04" class="headerlink" title="其他 (2021/03/04)"></a>其他 (2021/03/04)</h2><ul>
 <li>2020/01/18的时候还写了一些其他东西，2021/03/04删掉了。这一年多几乎没写东西，希望以后能多写多想。</li>
 </ul>
 ]]></content>
@@ -531,11 +424,12 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 <li><p>创建<code>AgentSpec</code>时传入的<code>interface</code>参数决定了agent与环境交互的API接口，一般可以通过<code>AgentInterface.from_type(AgentType.Laner)</code>设定（不同AgentType的interface不同，通过这个方法可以直接设定Agent的interface）。从实际意义来看，<code>interface</code>决定了实际中的车辆是通过怎样的传感器来感知环境，同时也决定了agent策略的行动空间。</p>
 </li>
 <li><p>样例代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent <span class="keyword">import</span> AgentSpec, AgentPolicy</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent_interface <span class="keyword">import</span> AgentInterface, AgentType</span><br><span class="line"><span class="keyword">from</span> smarts.core.bezier_motion_planner <span class="keyword">import</span> BezierMotionPlanner</span><br><span class="line"><span class="keyword">from</span> smarts.core.utils.episodes <span class="keyword">import</span> episodes</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExamplePolicy</span>(<span class="params">AgentPolicy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, target_speed = <span class="number">10</span></span>):</span></span><br><span class="line">        self.motion_planner = BezierMotionPlanner()</span><br><span class="line">        self.target_speed = target_speed</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span>(<span class="params">self, obs</span>):</span></span><br><span class="line">        ego = obs.ego_vehicle_state</span><br><span class="line">        current_pose = np.array([*ego.position[:<span class="number">2</span>], ego.heading])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># lookahead (at most) 10 waypoints</span></span><br><span class="line">        target_wp = obs.waypoint_paths[<span class="number">0</span>][:<span class="number">10</span>][<span class="number">-1</span>]</span><br><span class="line">        dist_to_wp = target_wp.dist_to(obs.ego_vehicle_state.position)</span><br><span class="line">        target_time = dist_to_wp / self.target_speed</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Here we&#x27;ve computed the pose we want to hold given our target</span></span><br><span class="line">        <span class="comment"># speed and the distance to the target waypoint.</span></span><br><span class="line">        target_pose_at_t = np.array(</span><br><span class="line">            [*target_wp.pos, target_wp.heading, target_time]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># The generated motion planner trajectory is compatible</span></span><br><span class="line">        <span class="comment"># with the `ActionSpaceType.Trajectory`</span></span><br><span class="line">        traj = self.motion_planner.trajectory(</span><br><span class="line">            current_pose, target_pose_at_t, n=<span class="number">10</span>, dt=<span class="number">0.5</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> traj</span><br><span class="line"></span><br><span class="line">AGENT_ID = <span class="string">&quot;Agent-007&quot;</span></span><br><span class="line">agent_spec = AgentSpec(</span><br><span class="line">    interface=AgentInterface.from_type(AgentType.Tracker)</span><br><span class="line">    policy_params=&#123;<span class="string">&quot;target_speed&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">    policy_builder=ExamplePolicy</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">env = gym.make(</span><br><span class="line">    <span class="string">&quot;smarts.env:hiway-v0&quot;</span>,</span><br><span class="line">    scenarios=[<span class="string">&quot;scenarios/loop&quot;</span>],</span><br><span class="line">    agent_specs=&#123;AGENT_ID: agent_spec&#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> episode <span class="keyword">in</span> episodes(n=<span class="number">100</span>):</span><br><span class="line">    agent = agent_spec.build_agent()</span><br><span class="line">    observations = env.reset()</span><br><span class="line">    episode.record_scenario(env.scenario_log)</span><br><span class="line"></span><br><span class="line">    dones = &#123;<span class="string">&quot;__all__&quot;</span>: <span class="literal">False</span>&#125;</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> dones[<span class="string">&quot;__all__&quot;</span>]:</span><br><span class="line">        agent_obs = observations[AGENT_ID]</span><br><span class="line">        action = agent.act(agent_obs)</span><br><span class="line">        observations, rewards, dones, infos = env.step(&#123;AGENT_ID: action&#125;)</span><br><span class="line">        episode.record_step(observations, rewards, dones, infos)</span><br><span class="line"></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent <span class="keyword">import</span> AgentSpec, AgentPolicy</span><br><span class="line"><span class="keyword">from</span> smarts.core.agent_interface <span class="keyword">import</span> AgentInterface, AgentType</span><br><span class="line"><span class="keyword">from</span> smarts.core.bezier_motion_planner <span class="keyword">import</span> BezierMotionPlanner</span><br><span class="line"><span class="keyword">from</span> smarts.core.utils.episodes <span class="keyword">import</span> episodes</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExamplePolicy</span>(<span class="params">AgentPolicy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, target_speed = <span class="number">10</span></span>):</span></span><br><span class="line">        self.motion_planner = BezierMotionPlanner()</span><br><span class="line">        self.target_speed = target_speed</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span>(<span class="params">self, obs</span>):</span></span><br><span class="line">        ego = obs.ego_vehicle_state</span><br><span class="line">        current_pose = np.array([*ego.position[:<span class="number">2</span>], ego.heading])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># lookahead (at most) 10 waypoints</span></span><br><span class="line">        target_wp = obs.waypoint_paths[<span class="number">0</span>][:<span class="number">10</span>][<span class="number">-1</span>]</span><br><span class="line">        dist_to_wp = target_wp.dist_to(obs.ego_vehicle_state.position)</span><br><span class="line">        target_time = dist_to_wp / self.target_speed</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Here we&#x27;ve computed the pose we want to hold given our target</span></span><br><span class="line">        <span class="comment"># speed and the distance to the target waypoint.</span></span><br><span class="line">        target_pose_at_t = np.array(</span><br><span class="line">            [*target_wp.pos, target_wp.heading, target_time]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># The generated motion planner trajectory is compatible</span></span><br><span class="line">        <span class="comment"># with the `ActionSpaceType.Trajectory`</span></span><br><span class="line">        traj = self.motion_planner.trajectory(</span><br><span class="line">            current_pose, target_pose_at_t, n=<span class="number">10</span>, dt=<span class="number">0.5</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> traj</span><br><span class="line"></span><br><span class="line">AGENT_ID = <span class="string">&quot;Agent-007&quot;</span></span><br><span class="line">agent_spec = AgentSpec(</span><br><span class="line">    interface=AgentInterface.from_type(AgentType.Tracker)</span><br><span class="line">    policy_params=&#123;<span class="string">&quot;target_speed&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">    policy_builder=ExamplePolicy</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">env = gym.make(</span><br><span class="line">    <span class="string">&quot;smarts.env:hiway-v0&quot;</span>,</span><br><span class="line">    scenarios=[<span class="string">&quot;scenarios/loop&quot;</span>],</span><br><span class="line">    agent_specs=&#123;AGENT_ID: agent_spec&#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> episode <span class="keyword">in</span> episodes(n=<span class="number">100</span>):</span><br><span class="line">    agent = agent_spec.build_agent()</span><br><span class="line">    observations = env.reset()</span><br><span class="line">    episode.record_scenario(env.scenario_log)</span><br><span class="line"></span><br><span class="line">    dones = &#123;<span class="string">&quot;__all__&quot;</span>: <span class="literal">False</span>&#125;</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> dones[<span class="string">&quot;__all__&quot;</span>]:</span><br><span class="line">        agent_obs = observations[AGENT_ID]</span><br><span class="line">        action = agent.act(agent_obs)</span><br><span class="line">        observations, rewards, dones, infos = env.step(&#123;AGENT_ID: action&#125;)</span><br><span class="line">        episode.record_step(observations, rewards, dones, infos)</span><br><span class="line"></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h2 id="关于环境"><a href="#关于环境" class="headerlink" title="关于环境"></a>关于环境</h2><ul>
 <li><p>SMARTS提供了Scenario Studio，可以设计个性化/多样化的地图进行训练，从而提高模型的泛化能力。</p>
-<p><img src="/images/scenario_studio.gif"></p>
+<p><img src="/images/scenario_studio.gif" alt=""></p>
 </li>
 <li><p>SMARTS提供了两类环境（两种不同的<code>Env</code>类）。一种是<code>HiwayEnv</code>，与<a href="https://gym.openai.com/">Open AI Gym</a>的接口一致；另一类是<code>RLlibHiwayEnv</code>(which is designed for RLlib framework)。相比而言，后者一定程度上更加高效，但使用起来也复杂些。</p>
 </li>
@@ -545,8 +439,8 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
         <category>杂记--技术篇</category>
       </categories>
       <tags>
-        <tag>smarts</tag>
         <tag>RL</tag>
+        <tag>smarts</tag>
         <tag>模拟器</tag>
       </tags>
   </entry>
@@ -557,7 +451,8 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 <li><p>SMARTS允许用户设计个性化的agents，每个<code>agent</code>是<code>AgentSpec</code>的实例化（准确来说，<code>agent</code>是<code>AgentSpec</code>的实例<code>agent_spec</code>通过<code>build_agent</code>方法得到）。</p>
 </li>
 <li><p><code>AgentSpec</code>的属性如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AgentSpec</span>:</span></span><br><span class="line">    <span class="comment"># This is optional because sometimes when building re-useable specs,</span></span><br><span class="line">    <span class="comment"># you don&#x27;t know the agent interface ahead of time.</span></span><br><span class="line">    interface: AgentInterface = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># If you are training a policy with RLLib, you don&#x27;t necessarily</span></span><br><span class="line">    <span class="comment"># want to set the policy as part of the AgentSpec, thus we leave</span></span><br><span class="line">    <span class="comment"># it as an optional field.</span></span><br><span class="line">    policy_builder: Callable[..., AgentPolicy] = <span class="literal">None</span></span><br><span class="line">    policy_params: Optional[Any] = <span class="literal">None</span></span><br><span class="line">    observation_adapter: Callable = <span class="keyword">lambda</span> obs: obs</span><br><span class="line">    action_adapter: Callable = <span class="keyword">lambda</span> act: act</span><br><span class="line">    reward_adapter: Callable = <span class="keyword">lambda</span> obs, reward: reward</span><br><span class="line">    info_adapter: Callable = <span class="keyword">lambda</span> reward, info: info</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AgentSpec</span>:</span></span><br><span class="line">    <span class="comment"># This is optional because sometimes when building re-useable specs,</span></span><br><span class="line">    <span class="comment"># you don&#x27;t know the agent interface ahead of time.</span></span><br><span class="line">    interface: AgentInterface = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># If you are training a policy with RLLib, you don&#x27;t necessarily</span></span><br><span class="line">    <span class="comment"># want to set the policy as part of the AgentSpec, thus we leave</span></span><br><span class="line">    <span class="comment"># it as an optional field.</span></span><br><span class="line">    policy_builder: Callable[..., AgentPolicy] = <span class="literal">None</span></span><br><span class="line">    policy_params: Optional[Any] = <span class="literal">None</span></span><br><span class="line">    observation_adapter: Callable = <span class="keyword">lambda</span> obs: obs</span><br><span class="line">    action_adapter: Callable = <span class="keyword">lambda</span> act: act</span><br><span class="line">    reward_adapter: Callable = <span class="keyword">lambda</span> obs, reward: reward</span><br><span class="line">    info_adapter: Callable = <span class="keyword">lambda</span> reward, info: info</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="AgentInterface"><a href="#AgentInterface" class="headerlink" title="AgentInterface"></a>AgentInterface</h3><ul>
 <li><p><code>AgentInterface</code>决定了agent获得的环境信息是何种形式（即决定了<code>observation</code>的形式），同时决定了agent有怎样的动作空间。</p>
@@ -566,84 +461,8 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 </li>
 <li><p><code>AgentInterface</code>一般通过<code>from_type</code>方法实例化，下面给出一个实例化的样例代码</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">agent_interface = AgentInterface.from_type(</span><br><span class="line">	interface = AgentType.Standard,</span><br><span class="line">	max_episode_steps = <span class="number">1000</span>,</span><br><span class="line">	...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
 <p>其中，<code>AgentType</code>中包含了一下预先设定好的interface type，内容如下</p>
-<table>
-<thead>
-<tr>
-<th>keys</th>
-<th>AgentType.Full</th>
-<th>AgentType.StandardWithAbsoluteSteering</th>
-<th>AgentType.Standard</th>
-<th>AgentType.Laner</th>
-<th>AgentType.LanerWithSpeed</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>max_episode_steps</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>neighborhood_vehicles</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>waypoints</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>drivable_area_grid_map</td>
-<td>√</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>ogm</td>
-<td>√</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>rgb</td>
-<td>√</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>lidar</td>
-<td>√</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>action</td>
-<td>ActionSpaceType.Continuous</td>
-<td>ActionSpaceType.Continuous</td>
-<td>ActionSpaceType.ActuatorDynamic</td>
-<td>ActionSpaceType.Lane</td>
-<td>ActionSpaceType.LaneWithContinuousSpeed</td>
-</tr>
-</tbody></table>
+<p>| keys                   | AgentType.Full             | AgentType.StandardWithAbsoluteSteering | AgentType.Standard              | AgentType.Laner      | AgentType.LanerWithSpeed                |<br>| ——————————— | ————————————— | ——————————————————— | ———————————————- | —————————— | ———————————————————- |<br>| max_episode_steps      | √                          | √                                      | √                               | √                    | √                                       |<br>| neighborhood_vehicles  | √                          | √                                      | √                               |                      |                                         |<br>| waypoints              | √                          | √                                      | √                               | √                    | √                                       |<br>| drivable_area_grid_map | √                          |                                        |                                 |                      |                                         |<br>| ogm                    | √                          |                                        |                                 |                      |                                         |<br>| rgb                    | √                          |                                        |                                 |                      |                                         |<br>| lidar                  | √                          |                                        |                                 |                      |                                         |<br>| action                 | ActionSpaceType.Continuous | ActionSpaceType.Continuous             | ActionSpaceType.ActuatorDynamic | ActionSpaceType.Lane | ActionSpaceType.LaneWithContinuousSpeed |</p>
 <p>其中<code>max_episode_steps</code>控制了<code>agent</code>每轮episode最多执行的行动步数，如果设置为<code>None</code>则没有最大步数限制。在<code>RLlib</code>中可以通过设置<code>horizon</code>达到同样的效果，但不是agent特异的。</p>
 </li>
 </ul>
@@ -655,19 +474,23 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 <li><p>adapters用于对输入输出进行调整。以输入为例，传感器获得信息是比较丰富且复杂的，<code>Adapter</code>的作用是从raw information当中提取出部分信息作为<code>Policy</code>的输入（也就是输入的<code>observation</code>参数）。</p>
 </li>
 <li><p>下面给出一份样例代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Adapter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">observation_adapter</span>(<span class="params">env_observation</span>):</span></span><br><span class="line">    ego = env_observation.ego_vehicle_state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;speed&quot;</span>: [ego.speed],</span><br><span class="line">        <span class="string">&quot;steering&quot;</span>: [ego.steering],</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Associated Space</span></span><br><span class="line"><span class="comment"># You want to match the space to the adapter</span></span><br><span class="line">OBSERVATION_SPACE = gym.spaces.Dict(</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">## see http://gym.openai.com/docs/#spaces</span></span><br><span class="line">    <span class="string">&quot;speed&quot;</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">    <span class="string">&quot;steering&quot;</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Adapter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">observation_adapter</span>(<span class="params">env_observation</span>):</span></span><br><span class="line">    ego = env_observation.ego_vehicle_state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;speed&quot;</span>: [ego.speed],</span><br><span class="line">        <span class="string">&quot;steering&quot;</span>: [ego.steering],</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Associated Space</span></span><br><span class="line"><span class="comment"># You want to match the space to the adapter</span></span><br><span class="line">OBSERVATION_SPACE = gym.spaces.Dict(</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">## see http://gym.openai.com/docs/#spaces</span></span><br><span class="line">    <span class="string">&quot;speed&quot;</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">    <span class="string">&quot;steering&quot;</span>: gym.spaces.Box(low=<span class="number">-1e10</span>, high=<span class="number">1e10</span>, shape=(<span class="number">1</span>,)),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h2 id="关于Environment的细节"><a href="#关于Environment的细节" class="headerlink" title="关于Environment的细节"></a>关于Environment的细节</h2><ul>
 <li><p>目前SMARTS提供两类训练环境，分别是<code>HiwayEnv</code>（<code>gym.env</code>风格的接口）和<code>RLlibHiwayEnv</code>（用于<code>RLlib</code>训练）。</p>
-<img src="/images/smarts_env.png" style="zoom:38%;" /></li>
+<p><img src="/images/smarts_env.png" style="zoom:38%;" /></p>
+</li>
 </ul>
 <h3 id="HiwayEnv"><a href="#HiwayEnv" class="headerlink" title="HiwayEnv"></a>HiwayEnv</h3><ul>
 <li><p><code>HiwayEnv</code>的接口与<code>gym.Env</code>的接口一致，主要APIs包括<code>reset</code>, <code>step</code>, <code>close</code>。下面给出一个样例使用代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line"><span class="comment"># make env</span></span><br><span class="line">env = gym.make(</span><br><span class="line">        <span class="string">&quot;smarts.env:hiway-v0&quot;</span>, <span class="comment"># env entry name</span></span><br><span class="line">        scenarios=[scenario_path], <span class="comment"># a list of paths to folders of scenarios</span></span><br><span class="line">        agent_specs=&#123;AGENT_ID: agent_spec&#125;, <span class="comment"># dictionary of agents to interact with the environment</span></span><br><span class="line">        headless=<span class="literal">False</span>, <span class="comment"># headless mode. False to enable Envision visualization of the environment</span></span><br><span class="line">        visdom=<span class="literal">False</span>, <span class="comment"># Visdom visualization of observations. False to disable. only supported in HiwayEnv.</span></span><br><span class="line">        seed=<span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step(&#123;AGENT_ID: agent_action&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line"><span class="comment"># make env</span></span><br><span class="line">env = gym.make(</span><br><span class="line">        <span class="string">&quot;smarts.env:hiway-v0&quot;</span>, <span class="comment"># env entry name</span></span><br><span class="line">        scenarios=[scenario_path], <span class="comment"># a list of paths to folders of scenarios</span></span><br><span class="line">        agent_specs=&#123;AGENT_ID: agent_spec&#125;, <span class="comment"># dictionary of agents to interact with the environment</span></span><br><span class="line">        headless=<span class="literal">False</span>, <span class="comment"># headless mode. False to enable Envision visualization of the environment</span></span><br><span class="line">        visdom=<span class="literal">False</span>, <span class="comment"># Visdom visualization of observations. False to disable. only supported in HiwayEnv.</span></span><br><span class="line">        seed=<span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step(&#123;AGENT_ID: agent_action&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="RLlibHiwayENv"><a href="#RLlibHiwayENv" class="headerlink" title="RLlibHiwayENv"></a>RLlibHiwayENv</h3><ul>
 <li><p><code>RLlibHiwayEnv</code>继承类<code>MultiAgentEnv</code>，也包含<code>reset</code>, <code>step</code>, <code>close</code>的API。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> smarts.env.rllib_hiway_env <span class="keyword">import</span> RLlibHiWayEnv</span><br><span class="line"></span><br><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line">env = RLlibHiWayEnv(</span><br><span class="line">    config=&#123;</span><br><span class="line">        <span class="string">&quot;scenarios&quot;</span>: [scenario_path], <span class="comment"># scenarios list</span></span><br><span class="line">        <span class="string">&quot;agent_specs&quot;</span>: &#123;AGENT_ID: agent&#125;, <span class="comment"># add agents</span></span><br><span class="line">        <span class="string">&quot;headless&quot;</span>: <span class="literal">False</span>, <span class="comment"># enable envision gui, set False to enable.</span></span><br><span class="line">        <span class="string">&quot;seed&quot;</span>: <span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step(&#123;AGENT_ID: agent_action&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> smarts.env.rllib_hiway_env <span class="keyword">import</span> RLlibHiWayEnv</span><br><span class="line"></span><br><span class="line"><span class="comment"># build agent</span></span><br><span class="line">agent = agent_spec.build_agents()</span><br><span class="line"></span><br><span class="line">env = RLlibHiWayEnv(</span><br><span class="line">    config=&#123;</span><br><span class="line">        <span class="string">&quot;scenarios&quot;</span>: [scenario_path], <span class="comment"># scenarios list</span></span><br><span class="line">        <span class="string">&quot;agent_specs&quot;</span>: &#123;AGENT_ID: agent&#125;, <span class="comment"># add agents</span></span><br><span class="line">        <span class="string">&quot;headless&quot;</span>: <span class="literal">False</span>, <span class="comment"># enable envision gui, set False to enable.</span></span><br><span class="line">        <span class="string">&quot;seed&quot;</span>: <span class="number">42</span>, <span class="comment"># RNG Seed, seeds are set at the start of simulation, and never automatically re-seeded.</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset env</span></span><br><span class="line">observations = env.reset()</span><br><span class="line"></span><br><span class="line"><span class="comment"># step env</span></span><br><span class="line">agent_obs = observations[AGENT_ID]</span><br><span class="line">agent_action = agent.act(agent_obs)</span><br><span class="line">observations, rewards, dones, _ = env.step(&#123;AGENT_ID: agent_action&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># close env</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="Environment-features"><a href="#Environment-features" class="headerlink" title="Environment features"></a>Environment features</h3><h4 id="Scenario-Iterator"><a href="#Scenario-Iterator" class="headerlink" title="Scenario Iterator"></a>Scenario Iterator</h4><ul>
 <li>如果<code>Env</code>config传入的参数包含多个scenarios，那么SMARTS会轮流使用这些scenarios, 简单而言在每次调用<code>env.reset()</code>后都会自动加载下一个scenario。</li>
@@ -727,7 +550,7 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 <li><code>metadata</code> - <code>GridMapMetadata</code></li>
 <li><code>data</code> - a RGB image (default 256x256) with the ego vehicle at the center</li>
 </ul>
-<p><img src="/images/smarts_road.png"></p>
+<p><img src="/images/smarts_road.png" alt=""></p>
 </blockquote>
 </li>
 <li><p><code>occupancy_grid_map</code> : 提供observation image以及元数据 。</p>
@@ -772,54 +595,9 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
         <category>杂记--技术篇</category>
       </categories>
       <tags>
+        <tag>RL</tag>
         <tag>smarts</tag>
-        <tag>RL</tag>
         <tag>模拟器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>overcome &quot;CEM&quot;</title>
-    <url>/2021/03/20/CEM/</url>
-    <content><![CDATA[<h3 id="关于CEM算法"><a href="#关于CEM算法" class="headerlink" title="关于CEM算法"></a>关于CEM算法</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
-<li>CEM (cross entropy method) 算法是一种无梯度的优化算法。对于一般的优化问题，我们可以认为问题给定了优化的目标$S(M)$，其中$M$是我们想要优化的参数，即整个优化过程就是为了求解：<script type="math/tex; mode=display">
-M^* = \mathop{\arg\max}_{M}S(M)</script>对于许多优化问题，尤其是凸优化问题，我们能够用梯度优化算法求解得到$M^*$。而CEM算法不同于梯度算法，他不借助问题的结构（这里指目标函数$S(·)$的表达式），而是将把目标函数$S(·)$作为黑盒求解。</li>
-</ul>
-<h4 id="求解过程"><a href="#求解过程" class="headerlink" title="求解过程"></a>求解过程</h4><ul>
-<li><p>CEM的整个求解过程实际上是在维护参数$M$的一个分布$f$，算法起初初始化一个分布$f<em>0$，之后迭代得到最终分布$f</em>{T}$。从$f_0$到$f_T$的区别在于初始化的$f_0$可能是很差的（从$f_0$分布很难采样得到最优参数$M^<em>$），而从$f_0$到$f_T$的迭代过程可以理解为让分布越来越好（使得从分布中采样得到$M^</em>$的概率逐渐增大，或者说采到好样本的概率逐渐增大）。</p>
-</li>
-<li><p>另外还有一个细节是，不管是初始化$f<em>0$，还是从$f_t$到$f</em>{t+1}$的迭代，我们实际上都得先假设一个分布类$\mathcal{F}$。这是什么意思？事实上，对分布进行调整往往都是对分布的参数进行调整（例如调整高斯分布的均值和方差），而对分布进行初始化，我们也得先确定分布类，然后初始化分布参数。在实际应用CEM算法的过程中，我们常常一般高斯分布。</p>
-</li>
-<li><p>具体的算法过程如下（以高斯分布的集合作为$\mathcal{F}$为例）：</p>
-<ul>
-<li><p>初始化采样数$n$和筛选因子$\rho$（含义后续介绍），确定初始分布$f_0$的参数。</p>
-</li>
-<li><p>在第$t$轮时，依据分布$f_{t-1}$采样得到$n$个样本${M_1, M_2, …, M_n}$，计算相应的目标函数值$S(M_i), 1\leq i\leq n$，选取其中最大的前$\lfloor \rho n\rfloor$个样本，得到样本索引$I \subseteq {1, 2, …, n}$。进行如下更新：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\mu_{t} &= \frac{\sum_{i\in I}M_i}{|I|}\\
-\sigma_{t}^2 &=\frac{\sum_{i\in I}(M_i - \mu_t)^T(M_i - \mu_t)}{|I|}
-\end{aligned}</script></li>
-<li><p><strong>注意</strong>：在更新公式中，$(M_i - \mu_t)$项增加了转置，因为参数$M_i$大概率是个向量。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="CEM算法和强化学习"><a href="#CEM算法和强化学习" class="headerlink" title="CEM算法和强化学习"></a>CEM算法和强化学习</h3><ul>
-<li>CEM是一种无梯度优化算法，它并不局限于具体的任务或场景。对于强化学习而言，若对policy进行参数化表示，那么配合某种<code>policy evaluation</code>算法即利用CEM对policy的参数进行优化。</li>
-<li>实践中证明，在强化学习任务中直接使用CEM算法很容易收敛到局部最优，因此一般使用noisy cross entropy method，它和CEM算法的区别在于：NCEM在对分布参数进行迭代更新时额外加上一个噪声，以此避免过早地陷入局部最优。</li>
-</ul>
-<h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><ul>
-<li><p>参考文献</p>
-<p><a href="https://link.zhihu.com/?target=http%3A//citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.80.6681%26rep%3Drep1%26type%3Dpdf">Learning Tetris Using the NoisyCross-Entropy Method</a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>ML笔记</category>
-      </categories>
-      <tags>
-        <tag>RL</tag>
-        <tag>optimization</tag>
       </tags>
   </entry>
 </search>
