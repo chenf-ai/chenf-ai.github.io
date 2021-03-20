@@ -781,19 +781,24 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
     <title>overcome &quot;CEM&quot;</title>
     <url>/2021/03/20/CEM/</url>
     <content><![CDATA[<h3 id="关于CEM算法"><a href="#关于CEM算法" class="headerlink" title="关于CEM算法"></a>关于CEM算法</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
-<li>CEM (cross entropy method) 算法是一种无梯度的优化算法。对于一般的优化问题，我们可以认为问题给定了优化的目标$S(M)$，其中$M$是我们想要优化的参数，即整个优化过程就是为了求解：<br>$$<br>M^* = \mathop{\arg\max}_{M}S(M)<br>$$<br>对于许多优化问题，尤其是凸优化问题，我们能够用梯度优化算法求解得到$M^*$。而CEM算法不同于梯度算法，他不借助问题的结构（这里指目标函数$S(·)$的表达式），而是将把目标函数$S(·)$作为黑盒求解。</li>
+<li>CEM (cross entropy method) 算法是一种无梯度的优化算法。对于一般的优化问题，我们可以认为问题给定了优化的目标$S(M)$，其中$M$是我们想要优化的参数，即整个优化过程就是为了求解：<script type="math/tex; mode=display">
+M^* = \mathop{\arg\max}_{M}S(M)</script>对于许多优化问题，尤其是凸优化问题，我们能够用梯度优化算法求解得到$M^*$。而CEM算法不同于梯度算法，他不借助问题的结构（这里指目标函数$S(·)$的表达式），而是将把目标函数$S(·)$作为黑盒求解。</li>
 </ul>
 <h4 id="求解过程"><a href="#求解过程" class="headerlink" title="求解过程"></a>求解过程</h4><ul>
-<li><p>CEM的整个求解过程实际上是在维护参数$M$的一个分布$f$，算法起初初始化一个分布$f_0$，之后迭代得到最终分布$f_{T}$。从$f_0$到$f_T$的区别在于初始化的$f_0$可能是很差的（从$f_0$分布很难采样得到最优参数$M^*$），而从$f_0$到$f_T$的迭代过程可以理解为让分布越来越好（使得从分布中采样得到$M^*$的概率逐渐增大，或者说采到好样本的概率逐渐增大）。</p>
+<li><p>CEM的整个求解过程实际上是在维护参数$M$的一个分布$f$，算法起初初始化一个分布$f<em>0$，之后迭代得到最终分布$f</em>{T}$。从$f_0$到$f_T$的区别在于初始化的$f_0$可能是很差的（从$f_0$分布很难采样得到最优参数$M^<em>$），而从$f_0$到$f_T$的迭代过程可以理解为让分布越来越好（使得从分布中采样得到$M^</em>$的概率逐渐增大，或者说采到好样本的概率逐渐增大）。</p>
 </li>
-<li><p>另外还有一个细节是，不管是初始化$f_0$，还是从$f_t$到$f_{t+1}$的迭代，我们实际上都得先假设一个分布类$\mathcal{F}$。这是什么意思？事实上，对分布进行调整往往都是对分布的参数进行调整（例如调整高斯分布的均值和方差），而对分布进行初始化，我们也得先确定分布类，然后初始化分布参数。在实际应用CEM算法的过程中，我们常常一般高斯分布。</p>
+<li><p>另外还有一个细节是，不管是初始化$f<em>0$，还是从$f_t$到$f</em>{t+1}$的迭代，我们实际上都得先假设一个分布类$\mathcal{F}$。这是什么意思？事实上，对分布进行调整往往都是对分布的参数进行调整（例如调整高斯分布的均值和方差），而对分布进行初始化，我们也得先确定分布类，然后初始化分布参数。在实际应用CEM算法的过程中，我们常常一般高斯分布。</p>
 </li>
 <li><p>具体的算法过程如下（以高斯分布的集合作为$\mathcal{F}$为例）：</p>
 <ul>
 <li><p>初始化采样数$n$和筛选因子$\rho$（含义后续介绍），确定初始分布$f_0$的参数。</p>
 </li>
-<li><p>在第$t$轮时，依据分布$f_{t-1}$采样得到$n$个样本${M_1, M_2, …, M_n}$，计算相应的目标函数值$S(M_i), 1\leq i\leq n$，选取其中最大的前$\lfloor \rho n\rfloor$个样本，得到样本索引$I \subseteq {1, 2, …, n}$。进行如下更新：<br>$$<br>\begin{aligned}<br>\mu_{t} &amp;= \frac{\sum_{i\in I}M_i}{|I|}\<br>\sigma_{t}^2 &amp;=\frac{\sum_{i\in I}(M_i - \mu_t)^T(M_i - \mu_t)}{|I|}<br>\end{aligned}<br>$$</p>
-</li>
+<li><p>在第$t$轮时，依据分布$f_{t-1}$采样得到$n$个样本${M_1, M_2, …, M_n}$，计算相应的目标函数值$S(M_i), 1\leq i\leq n$，选取其中最大的前$\lfloor \rho n\rfloor$个样本，得到样本索引$I \subseteq {1, 2, …, n}$。进行如下更新：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_{t} &= \frac{\sum_{i\in I}M_i}{|I|}\\
+\sigma_{t}^2 &=\frac{\sum_{i\in I}(M_i - \mu_t)^T(M_i - \mu_t)}{|I|}
+\end{aligned}</script></li>
 <li><p><strong>注意</strong>：在更新公式中，$(M_i - \mu_t)$项增加了转置，因为参数$M_i$大概率是个向量。</p>
 </li>
 </ul>
@@ -805,7 +810,7 @@ Chenf他偷偷告诉我，建立这个小站是为了方便工作，提高效率
 </ul>
 <h3 id="AK"><a href="#AK" class="headerlink" title="AK"></a>AK</h3><ul>
 <li><p>参考文献</p>
-<p><a href="https://link.zhihu.com/?target=http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.80.6681&rep=rep1&type=pdf">Learning Tetris Using the NoisyCross-Entropy Method</a></p>
+<p><a href="https://link.zhihu.com/?target=http%3A//citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.80.6681%26rep%3Drep1%26type%3Dpdf">Learning Tetris Using the NoisyCross-Entropy Method</a></p>
 </li>
 </ul>
 ]]></content>
