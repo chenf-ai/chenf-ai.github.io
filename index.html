@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feng Chen's Homepage</title>
+    <style>
+        /* ================= 核心样式 (零依赖，断网可用) ================= */
+        body {
+            font-family: Palatino, "EB Garamond", Georgia, "Times New Roman", serif;
+            background-color: #fefefe;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 布局容器 */
+        .container {
+            max-width: 960px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        /* 左侧栏 (照片与联系方式) */
+        .sidebar {
+            flex: 0 0 250px;
+            text-align: center;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #eee;
+            min-height: 250px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-style: italic;
+            overflow: hidden;
+        }
+
+        .contact-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 右侧栏 (主要内容) */
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* 标题与链接 */
+        h1 { margin-top: 0; font-size: 2.2rem; font-weight: normal;}
+        h2 { 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 10px; 
+            margin-top: 40px; 
+            font-size: 1.5rem;
+            font-weight: normal;
+        }
+        
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        
+        .links { margin-bottom: 20px; }
+        .links a { margin-right: 15px; font-weight: bold; }
+
+        /* 论文列表样式 */
+        ul.papers { list-style: none; padding: 0; }
+        li.paper-item { margin-bottom: 25px; }
+        
+        .paper-title { 
+            font-weight: bold; 
+            font-size: 18px; 
+            color: #000;
+            text-decoration: none !important;
+        }
+        .paper-title:hover { text-decoration: underline !important; color: #0066cc; }
+        
+        .authors { color: #454545; font-size: 16px; line-height: 1.4; }
+        .venue { font-style: italic; color: #666; margin-top: 2px; }
+        .me { font-weight: bold; color: #000; } /* 高亮您的名字 */
+
+        /* 摘要折叠框 */
+        .abstract-box {
+            display: none;
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            margin-top: 8px;
+            border-left: 3px solid #0066cc;
+            font-size: 14px;
+            color: #555;
+        }
+        .toggle-btn {
+            cursor: pointer;
+            font-size: 14px;
+            color: #0066cc;
+            margin-left: 5px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+        .toggle-btn:hover { text-decoration: underline; }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #aaa;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { flex: auto; width: 100%; }
+            .profile-photo { max-width: 200px; margin: 0 auto; }
+        }
+    </style>
+
+    <script>
+        function toggleAbstract(id) {
+            var el = document.getElementById(id);
+            if (el.style.display === "block") {
+                el.style.display = "none";
+            } else {
+                el.style.display = "block";
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <img src="img/feng-chen.jpeg" alt="Feng Chen" class="profile-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="profile-photo" style="display:none;">[Photo]</div>
+            
+            <div class="contact-info">
+                <p><b>Feng Chen</b></p>
+                <p>PhD Student @ NTU</p>
+                <p>chenfeng20010105@gmail.com</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1>Feng Chen</h1>
+            <p>
+                I am currently a Ph.D. candidate at the College of Computing and Data Science (CCDS), 
+                <a href="https://www.ntu.edu.sg/" target="_blank">Nanyang Technological University (NTU)</a>, 
+                supervised by Prof. <a href="https://personal.ntu.edu.sg/boan/" target="_blank">Bo An</a>.
+            </p>
+            <p>
+                Previously, I obtained my M.Sc. and B.S. degrees from the School of Artificial Intelligence at 
+                <a href="https://www.nju.edu.cn/en/" target="_blank">Nanjing University</a>, 
+                where I was advised by Assoc. Prof. <a href="http://www.lamda.nju.edu.cn/zhangzz/" target="_blank">Zong-Zhang Zhang</a>.
+            </p>
+            <p>
+                My research interests broadly include <strong>Reinforcement Learning</strong>, 
+                <strong>Multi-Agent Systems</strong>, and <strong>Large Language Model Agents</strong>. 
+            </p>
+            
+            <div class="links">
+                <a href="https://scholar.google.com/citations?user=QgorT8QAAAAJ" target="_blank">Google Scholar</a>
+                <a href="https://github.com/chenf-ai" target="_blank">GitHub</a>
+                <a href="files/CV_110125.pdf" target="_blank">CV</a>
+            </div>
+
+            <h2>Publications</h2>
+            <ul class="papers">
+
+                <li class="paper-item">
+                  <a href="https://arxiv.org/abs/2506.02672" class="paper-title" target="_blank">EvaLearn: Quantifying the Learning Capability and Efficiency of LLMs via Sequential Problem Solving</a>
+                  <div class="authors">Shihan Dou*, Ming Zhang*, Chenhao Huang, Jiayi Chen, <span class="me">Feng Chen</span>, Shichun Liu, Yan Liu, Chenxiao Liu, Cheng Zhong, Zongzhang Zhang, Tao Gui, Chao Xin, Chengzhi Wei, Lin Yan, Yonghui Wu, Qi Zhang, Xuanjing Huang</div>
+                  <div class="venue">Advances in Neural Information Processing Systems (NeurIPS), 2025</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://openreview.net/forum?id=1R84O2Xr1k" class="paper-title" target="_blank">Learning to Reuse Policies in State Evolvable Environments</a>
+                    <div class="authors">Ziqian Zhang*, Bohan Yang*, Lihe Li, Bian Yuqi, Ruiqi Xue, <span class="me">Feng Chen</span>, Yichen Li, Lei Yuan, Yang Yu</div>
+                    <div class="venue">International Conference on Machine Learning (ICML), 2025</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://ieeexplore.ieee.org/document/10988880" class="paper-title" target="_blank">Learning to Coordinate with Different Teammates via Team Probing</a>
+                    <div class="authors">Hao Ding*, Chengxing Jia*, Zongzhang Zhang*, Cong Guan, <span class="me">Feng Chen</span>, Lei Yuan, Yang Yu, </div>
+                    <div class="venue">IEEE Transactions on Neural Networks and Learning Systems (TNNLS), 2025 (In press)</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://aclanthology.org/2025.acl-long.285/" class="paper-title" target="_blank">Lost in the Context: Insufficient and Distracted Attention to Contexts in Preference Modeling</a>
+                  <div class="authors">Shihan Dou*, Jiayi Chen*, Chenhao Huang*, <span class="me">Feng Chen</span>, Chengzhi Wei, Huiyuan Zheng, Shichun Liu, Yan Liu, Chenxiao Liu, Chao Xin, Lin Yan, Zongzhang Zhang, Tao Gui, Qi Zhang, Xuanjing Huang</div>
+                  <div class="venue">Annual Meeting of the Association for Computational Linguistics (ACL), 2025</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://openreview.net/forum?id=CeNNIQ8GJf" class="paper-title" target="_blank">Efficient Multi-Agent Cooperation Learning through Teammate Lookahead</a>
+                    <div class="authors"><span class="me">Feng Chen</span>, Xinwei Chen, Rong-Jun Qin, Cong Guan, Lei Yuan, Zongzhang Zhang, Yang Yu</div>
+                    <div class="venue">Transactions on Machine Learning Research (TMLR), 2025</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://ieeexplore.ieee.org/document/10680461" class="paper-title" target="_blank">Efficient Communication via Self-supervised Information Aggregation for Online and Offline Multi-agent Reinforcement Learning</a>
+                    <div class="authors">Cong Guan, <span class="me">Feng Chen</span>, Lei Yuan, Zongzhang Zhang, Yang Yu</div>
+                    <div class="venue">IEEE Transactions on Neural Networks and Learning Systems (TNNLS), 2025</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://arxiv.org/abs/2411.10809" class="paper-title" target="_blank">Stable Continual Reinforcement Learning via Diffusion-based Trajectory Replay</a>
+                    <div class="authors"><span class="me">Feng Chen</span>, Fuguang Han, Cong Guan, Lei Yuan, Zhilong Zhang, Yang Yu, Zongzhang Zhang</div>
+                    <div class="venue">International Conference on Learning Representations (ICLR) Workshop GenAI4DM, 2024</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://openreview.net/pdf?id=M2fjpBP88K" class="paper-title" target="_blank">Efficient Human-AI Coordination via Preparatory Language-based Convention</a>
+                  <div class="authors">Cong Guan, Lichao Zhang, Chunpeng Fan, Yichen Li, <span class="me">Feng Chen</span>, Lihe Li, Yunjia Tian, Lei Yuan, Yang Yu</div>
+                  <div class="venue">>International Conference on Learning Representations (ICLR) Workshop LLM Agents, 2024</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://dl.acm.org/doi/10.1007/978-3-031-70368-3_5" class="paper-title" target="_blank">Dynamics Adaptive Safe Reinforcement Learning with a Misspecified Simulator</a>
+                  <div class="authors">Ruiqi Xue, Ziqian Zhang, Lihe Li, <span class="me">Feng Chen</span>, Yichen Li, Yang Yu, Lei Yuan</div>
+                  <div class="venue">European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD), 2024</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://link.springer.com/article/10.1007/s11432-023-3853-y" class="paper-title" target="_blank">Robust Multi-agent Communication via Multi-view Message Certification</a>
+                  <div class="authors">Lei Yuan, Tao Jiang, Lihe Li, <span class="me">Feng Chen</span>, Zongzhang Zhang, Yang Yu</div>
+                  <div class="venue">Science China Information Sciences (SCIS), 2024</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://link.springer.com/article/10.1007/s11432-023-3862-1" class="paper-title" target="_blank">Multi-Agent Policy Transfer via Task Relationship Modeling</a>
+                    <div class="authors">Rongjun Qin*, <span class="me">Feng Chen</span>*, Tonghan Wang*, Lei Yuan, Xiaoran Wu, Yipeng Kang, Zongzhang Zhang, Chongjie Zhang, Yang Yu</div>
+                    <div class="venue">Science China Information Sciences (SCIS), 2024</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://link.springer.com/article/10.1007/s11704-023-2733-5" class="paper-title" target="_blank">Communication-Robust Multi-Agent Learning by Adaptable Auxiliary Multi-Agent Adversary Generation</a>
+                    <div class="authors">Lei Yuan*, <span class="me">Feng Chen</span>*, Zongzhang Zhang, Yang Yu</div>
+                    <div class="venue">Frontiers of Computer Science (FCS), 2024</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://openreview.net/forum?id=VAvSUG3hwI" class="paper-title" target="_blank">One by One, Continual Coordinating with Humans via Hyper-Teammate Identification</a>
+                    <div class="authors">Cong Guan, <span class="me">Feng Chen</span>, Ke Xue, Chunpeng Fan, Lichao Zhang, Ziqian Zhang, Pengyao Zhao, Zongzhang Zhang, Chao Qian, Lei Yuan, Yang Yu</div>
+                    <div class="venue">Transactions on Machine Learning Research (TMLR), 2024</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://dl.acm.org/doi/10.1145/3627676.3627678" class="paper-title" target="_blank">Learning to Coordinate with Anyone</a>
+                    <div class="authors">Lei Yuan, Lihe Li, Ziqian Zhang, <span class="me">Feng Chen</span>, Tianyi Zhang, Cong Guan, Yang Yu, Zhihua Zhou</div>
+                    <div class="venue">International Conference on Distributed Artificial Intelligence (DAI), 2023 (Best Paper Award)</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://ojs.aaai.org/index.php/AAAI/article/view/26388" class="paper-title" target="_blank">Robust multi-agent coordination via evolutionary generation of auxiliary adversarial attackers</a>
+                  <div class="authors">Lei Yuan*, Ziqian Zhang*, Ke Xue, Hao Yin, <span class="me">Feng Chen</span>, Cong Guan, Lihe Li, Chao Qian, Yang Yu</div>
+                  <div class="venue">AAAI Conference on Artificial Intelligence (AAAI), 2023 (Oral Presentation)</div>
+                </li>
+
+                <li class="paper-item">
+                    <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/075b2875e2b671ddd74aeec0ac9f0357-Abstract-Conference.html" class="paper-title" target="_blank">Efficient Multi-agent Communication via Self-supervised Information Aggregation</a>
+                    <div class="authors">Cong Guan*, <span class="me">Feng Chen</span>*, Lei Yuan, Chenghe Wang, Hao Yin, Zongzhang Zhang, Yang Yu</div>
+                    <div class="venue">Advances in Neural Information Processing Systems (NeurIPS), 2022</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://ojs.aaai.org/index.php/AAAI/article/view/26951" class="paper-title" target="_blank">Towards Deployment-Efficient and Collision-Free Multi-Agent Path Finding (Student Abstract)</a>
+                  <div class="authors"><span class="me">Feng Chen</span>, Chenghe Wang, Fuxiang Zhang, Hao Ding, Qiaoyong Zhong, Shiliang Pu, Zongzhang Zhang</div>
+                  <div class="venue">AAAI Conference on Artificial Intelligence (AAAI), 2023 (Student Abstract)</div>
+                </li>
+
+                <li class="paper-item">
+                  <a href="https://www.ijcai.org/proceedings/2022/85" class="paper-title" target="_blank">Multi-Agent Concentrative Coordination with Decentralized Task Representation</a>
+                  <div class="authors">Lei Yuan*, Chenghe Wang*, Jianhao Wang, Fuxiang Zhang, <span class="me">Feng Chen</span>, Cong Guan, Zongzhang Zhang, Yang Yu, Chongjie Zhang</div>
+                  <div class="venue">International Joint Conference on Artificial Intelligence (IJCAI), 2022</div>
+                </li>
+
+            </ul>
+
+            <h2>Internship Experience</h2>
+            <ul class="papers">
+              <li class="paper-item">
+                  <div><b>Large Language Model Research Intern</b>, ByteDance (Seed)</div>
+                  <div style="font-size: 14px; color: #666;">Sep 2024 - Jun 2025</div>
+                  <div>Focused on algorithmic research and exploration during the post-training stage of Large Language Models. Investigated advanced optimization strategies and methodologies to enhance model performance and alignment.</div>
+              </li>
+              <li class="paper-item">
+                  <div><b>Reinforcement Learning Research Intern</b>, ByteDance</div>
+                  <div style="font-size: 14px; color: #666;">Jul 2021 - Oct 2021</div>
+                  <div>Conducted research within Game AI scenarios, specifically focusing on the training methodologies for intelligent agents and the exploration of algorithms for automated game scene generation.</div>
+              </li>
+            </ul>
+
+        </div>
+    </div>
+
+</body>
+</html>
